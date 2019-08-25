@@ -3,6 +3,7 @@
 #include <cstring>
 #include <led-matrix.h>
 #include <Panel.h>
+#include <panels/panels.h>
 #include <RootPanel.h>
 #include <Layout.h>
 #include <Text.h>
@@ -11,6 +12,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <signal.h>
+
+#include "influxdb.hpp"
 
 using namespace std;
 
@@ -29,7 +32,7 @@ static void DrawOnCanvas(Canvas *canvas) {
      * Let's create a simple animation. We use the canvas to draw
      * pixels. We wait between each step to have a slower animation.
      */
-    canvas->Fill(0, 0, 255);
+//    canvas->Fill(0, 0, 255);
 
     int center_x = canvas->width() / 2;
     int center_y = canvas->height() / 2;
@@ -45,29 +48,24 @@ static void DrawOnCanvas(Canvas *canvas) {
     }
 }
 
-typedef struct meteoData {
+static MeteoData retrieveMeteoData() {
+    // query from table
+//    influxdb_cpp::server_info serverInfo("127.0.0.1", 8086, "", "test", "test");
+//    influxdb_cpp::query(resp, "show databases", si);
+//    cout << resp << endl;
+    return MeteoData("Cachan", 22, 26, 14, 50);
+}
 
-    std::string city;
-    int cityTemperature;
-    int minTemperature;
-    int maxTemperature;
-    int humidity;
+static GroundHumiditySensorData retrieveGroundHumiditySensorData() {
+    return GroundHumiditySensorData("HumiditySensor", 457, true);
+}
 
-    meteoData(std::string city, int cityTemperature, int minTemperature, int maxTemperature, int humidity) :
-            city(city),
-            cityTemperature(cityTemperature),
-            minTemperature(minTemperature),
-            maxTemperature(maxTemperature),
-            humidity(humidity) {
-    }
+static TemperatureSensorData retrieveTemperatureSensorData() {
+    return TemperatureSensorData("TemperatureSensor", 55, 20, 21);
+}
 
-} MeteoData;
-
-static void DrawOnCanvas2(Canvas *canvas) {
-    MeteoData origMeteoData("Cachan", 22, 26, 14, 50);
-
-    const MeteoData &meteoData = origMeteoData;
-
+static void DrawMeteo(Canvas *canvas) {
+    const MeteoData meteoData = retrieveMeteoData();
     /*
      * Load font. This needs to be a filename with a bdf bitmap font.
      */
@@ -127,10 +125,126 @@ static void DrawOnCanvas2(Canvas *canvas) {
     RootPanel rootPanel = RootPanel("rootPanel", PANEL_WIDTH, PANEL_HEIGHT, meteoPanel);
 
     std::cout << "Drawing ..." << std::endl;
+//    canvas->Fill(0, 0, 255);
     rootPanel.draw(*canvas);
-
-    sleep(10000);
     std::cout << "Drawing DONE" << std::endl;
+}
+
+static void DrawSensors(Canvas *canvas) {
+    std::cout << "Drawing Sensors BEGIN" << std::endl;
+
+    /*
+     * Load font. This needs to be a filename with a bdf bitmap font.
+     */
+    const char *bdf_font_file = "/home/pi/Desktop/leds/rpi-rgb-led-matrix/fonts/5x7.bdf";
+    rgb_matrix::Font font;
+    if (!font.LoadFont(bdf_font_file)) {
+        fprintf(stderr, "Couldn't load font '%s'\n", bdf_font_file);
+//        return 1;
+        return;
+    }
+
+
+    const GroundHumiditySensorData groundHumiditySensorData = retrieveGroundHumiditySensorData();
+    const TemperatureSensorData temperatureSensorData = retrieveTemperatureSensorData();
+
+    Layout floatLeftLayout = Layout(Layout::FLOAT_LEFT);
+    Layout floatRightLayout = Layout(Layout::FLOAT_RIGHT);
+
+    Text title = Text("title", floatLeftLayout, "Capteurs :", font);
+
+    Text groundHumiditySensor = Text("groundHumiditySensor", floatLeftLayout, "Humidité plante :", font);
+    Text groundHumiditySensorName = Text("groundHumiditySensorName", floatLeftLayout, groundHumiditySensorData.name,
+                                         font);
+    Text groundHumidityLabel = Text("groundHumidityLabel", floatLeftLayout, "Humidité :", font);
+    Text groundHumidityValue = Text("groundHumidityValue", floatRightLayout,
+                                    std::to_string(groundHumiditySensorData.humidity) + ".", font);
+    Text groundDryLabel = Text("groundDryLabel", floatLeftLayout, "Sec :", font);
+    Text groundDryValue = Text("groundDryValue", floatRightLayout, (groundHumiditySensorData.dry ? "OUI" : "NON"),
+                               font);
+
+    Text temperatureSensor = Text("temperatureSensor", floatLeftLayout, "Température pièce :", font);
+    Text temperatureSensorName = Text("temperatureSensorName", floatLeftLayout, temperatureSensorData.name, font);
+    Text temperatureLabel = Text("temperatureLabel", floatLeftLayout, "Température :", font);
+    Text temperatureValue = Text("temperatureValue", floatRightLayout,
+                                 std::to_string(temperatureSensorData.temperatureCelcius) + "°C", font, 5, 0);
+    Text heatIndexLabel = Text("heatIndexLabel", floatLeftLayout, "Indice de chaleur :", font);
+    Text heatIndexValue = Text("heatIndexValue", floatRightLayout,
+                               std::to_string(temperatureSensorData.heatIndexCelcius) + "°C", font, 5, 0);
+    Text humidityLabel = Text("humidityLabel", floatLeftLayout, "Humidité :", font);
+    Text humidityValue = Text("humidityValue", floatRightLayout, std::to_string(temperatureSensorData.humidity) + "%",
+                              font);
+    std::cout << "Drawing Sensors text components ready..." << std::endl;
+
+    int PANEL_WIDTH = 128;
+    int PANEL_HEIGHT = 128;
+    int LINE_HEIGHT = 10;
+    int LINE_WIDTH = 128;
+
+    Panel sensorPanel = Panel("sensorPanel", PANEL_WIDTH, PANEL_HEIGHT, 0, 0);
+    Panel groundHumiditySensorPanel = Panel("groundHumiditySensor", PANEL_WIDTH, PANEL_HEIGHT / 2, 0, 0);
+    Panel temperatureSensorPanel = Panel("temperatureSensor", PANEL_WIDTH, PANEL_HEIGHT / 2, PANEL_HEIGHT / 2, 0);
+//    sensorPanel.addComponent(&groundHumiditySensorPanel);
+    sensorPanel.addComponent(&temperatureSensorPanel);
+
+    //// HUMIDITÉ
+    std::cout << "Drawing Sensors assembling panel humidity" << std::endl;
+
+    Panel titleLine = Panel("titleLine", PANEL_WIDTH, LINE_HEIGHT, 0, 0);
+    titleLine.addComponent(&title);
+    groundHumiditySensorPanel.addComponent(&titleLine);
+
+    Panel groundHumiditySensorLine = Panel("groundHumiditySensor", LINE_WIDTH, LINE_HEIGHT, 0, LINE_HEIGHT);
+    groundHumiditySensorLine.addComponent(&groundHumiditySensor);
+    groundHumiditySensorPanel.addComponent(&groundHumiditySensorLine);
+
+    Panel groundHumiditySensorNameLine = Panel("groundHumiditySensorName", LINE_WIDTH, LINE_HEIGHT, 0, 2 * LINE_HEIGHT);
+    groundHumiditySensorNameLine.addComponent(&groundHumiditySensorName);
+    groundHumiditySensorPanel.addComponent(&groundHumiditySensorNameLine);
+
+    Panel groundHumidityLine = Panel("groundHumidityLine", LINE_WIDTH, LINE_HEIGHT, 0, 3 * LINE_HEIGHT);
+    groundHumidityLine.addComponent(&groundHumidityLabel);
+    groundHumidityLine.addComponent(&groundHumidityValue);
+    groundHumiditySensorPanel.addComponent(&groundHumidityLine);
+
+    Panel groundDryLine = Panel("groundDryLine", LINE_WIDTH, LINE_HEIGHT, 0, 4 * LINE_HEIGHT);
+    groundDryLine.addComponent(&groundDryLabel);
+    groundDryLine.addComponent(&groundDryValue);
+    groundHumiditySensorPanel.addComponent(&groundDryLine);
+
+    //// TEMPERATURE
+    std::cout << "Drawing Sensors assembling panel temperature" << std::endl;
+
+    Panel temperatureSensorLine = Panel("temperatureSensor", LINE_WIDTH, LINE_HEIGHT, 0, 0);
+    temperatureSensorLine.addComponent(&temperatureSensor);
+    temperatureSensorPanel.addComponent(&temperatureSensorLine);
+
+    Panel temperatureSensorNameLine = Panel("temperatureSensorName", LINE_WIDTH, LINE_HEIGHT, 0, LINE_HEIGHT);
+    temperatureSensorNameLine.addComponent(&temperatureSensorName);
+    temperatureSensorPanel.addComponent(&temperatureSensorNameLine);
+
+    Panel temperatureLine = Panel("temperature", LINE_WIDTH, LINE_HEIGHT, 0, 2 * LINE_HEIGHT);
+    temperatureLine.addComponent(&temperatureLabel);
+    temperatureLine.addComponent(&temperatureValue);
+    temperatureSensorPanel.addComponent(&temperatureLine);
+
+    Panel heatIndexLine = Panel("heatIndex", LINE_WIDTH, LINE_HEIGHT, 0, 3 * LINE_HEIGHT);
+    heatIndexLine.addComponent(&heatIndexLabel);
+    heatIndexLine.addComponent(&heatIndexValue);
+    temperatureSensorPanel.addComponent(&heatIndexLine);
+
+    Panel humidityLine = Panel("humidity", LINE_WIDTH, LINE_HEIGHT, 0, 4 * LINE_HEIGHT);
+    humidityLine.addComponent(&humidityLabel);
+    humidityLine.addComponent(&humidityValue);
+    temperatureSensorPanel.addComponent(&humidityLine);
+
+
+    RootPanel rootPanel = RootPanel("rootPanel", PANEL_WIDTH, PANEL_HEIGHT, sensorPanel);
+
+    std::cout << "Drawing Sensors ..." << std::endl;
+//    canvas->Fill(0, 0, 255);
+    rootPanel.draw(*canvas);
+    std::cout << "Drawing Sensors DONE" << std::endl;
 }
 
 
@@ -163,8 +277,18 @@ int main(int argc, char **argv) {
     // for that.
     signal(SIGTERM, InterruptHandler);
     signal(SIGINT, InterruptHandler);
-    DrawOnCanvas2(canvas);
-    DrawOnCanvas(canvas); // Using the canvas.
+    for (int i = 0; i < 100; ++i) {
+        std::cout << "Drawing 1" << std::endl;
+        canvas->Clear();
+        DrawMeteo(canvas);
+        sleep(8);
+        std::cout << "Drawing 2" << std::endl;
+        canvas->Clear();
+        DrawSensors(canvas);
+        sleep(8);
+    }
+    std::cout << "Drawing DONE, BYE" << std::endl;
+//    DrawOnCanvas(canvas); // Using the canvas.
 
     // Animation finished. Shut down the RGB matrix.
     canvas->Clear();

@@ -1,6 +1,6 @@
-[submodule "matrix"]
-	path = matrix
-	url = https://github.com/hzeller/rpi-rgb-led-matrix.git
 [submodule "libs/matrix"]
 	path = libs/matrix
 	url = https://github.com/hzeller/rpi-rgb-led-matrix.git
+[submodule "libs/influxdb-cpp"]
+	path = libs/influxdb-cpp
+	url = https://github.com/orca-zhang/influxdb-cpp.git

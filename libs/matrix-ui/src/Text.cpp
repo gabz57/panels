@@ -28,7 +28,7 @@ int Text::getWidth() const {
 //        std::cout << "Text::getCharWidth :: " << c << " = " << charWidth << std::endl;
         width += charWidth;
     }
-    std::cout << "Text::getWidth :: " << this->text << " = " << width << std::endl;
+//    std::cout << "Text::getWidth :: " << this->text << " = " << width << std::endl;
     return width;
 }
 
