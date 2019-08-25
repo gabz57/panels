@@ -23,13 +23,14 @@ void Panel::addComponent(Component *component) {
 
 void Panel::draw(Canvas &canvas, const Component *parent) const {
     std::cout << "Drawing Panel :: " << this->getId()
-              << "h:" << this->width << ", w:" << this->height
+              << " - w:" << this->width << ", h:" << this->height
+              << " - x-offset:" << this->xOffset() << ", x-offset:" << this->yOffset()
               << std::endl;
     std::unordered_map<std::string, Component *> mp = this->components;
     std::unordered_map<std::string, Component *>::iterator it;
     it = mp.begin();
     while (it != this->components.end()) {
-        std::cout << "Drawing child :: " << it->first << std::endl;
+//        std::cout << "--> Drawing child :: " << it->first << std::endl;
         it->second->draw(canvas, this);
         it++;
     }

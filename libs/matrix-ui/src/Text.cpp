@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include "utf8-internal.h"
+#include <unistd.h>
 
 Text::Text(std::string id, Layout &layout, std::string text, rgb_matrix::Font &font) :
         Component(id, 0, 0, layout),
@@ -24,7 +25,7 @@ int Text::getWidth() const {
     for (const char &c : this->text) {
         const uint32_t cp = utf8_next_codepoint(utf8_text);
         int charWidth = font.CharacterWidth(cp);
-        std::cout << "Text::getCharWidth :: " << c << " = " << charWidth << std::endl;
+//        std::cout << "Text::getCharWidth :: " << c << " = " << charWidth << std::endl;
         width += charWidth;
     }
     std::cout << "Text::getWidth :: " << this->text << " = " << width << std::endl;
@@ -36,8 +37,6 @@ int Text::getHeight() const {
 }
 
 void Text::draw(rgb_matrix::Canvas &canvas, const Component *parent) const {
-    std::cout << "Drawing Text :: " << this->text << std::endl;
-
     Color color(255, 255, 0);
     Color bg_color(0, 0, 0);
 
@@ -46,5 +45,11 @@ void Text::draw(rgb_matrix::Canvas &canvas, const Component *parent) const {
                   ? this->xOffset()
                   : this->xOffset() + parent->getWidth() - getWidth();
     int y = this->yOffset();
-    rgb_matrix::DrawText(&canvas, font, x, y + font.baseline(), color, &bg_color, this->text.c_str(), letter_spacing);
+    std::cout << "Drawing Text :: " << this->getId() << " - " << this->text
+              << " pos(" << x << "," << y << ") "
+              << " offset(" << this->xOffset() << "," << this->yOffset() << ") "
+              << std::endl;
+
+    rgb_matrix::DrawText(&canvas, font, parent->xOffset() + x, parent->yOffset() + y + font.baseline(), color, &bg_color, this->text.c_str(), letter_spacing);
+//    sleep(3);
 }

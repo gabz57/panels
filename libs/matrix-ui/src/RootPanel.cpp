@@ -19,8 +19,8 @@ void RootPanel::draw(Canvas &canvas, const Component *parent) const {
 }
 
 void RootPanel::draw(Canvas &canvas) const {
-    std::cout << "Drawing RootPanel :: " << this->getId()
-              << "h:" << this->width << ", w:" << this->height
+    std::cout << std::endl<< std::endl<< "Drawing RootPanel :: " << this->getId()
+              << " - w:" << this->width << ", h:" << this->height
               << std::endl;
     this->childComponent.draw(canvas, this);
 }

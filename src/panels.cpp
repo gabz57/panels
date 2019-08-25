@@ -45,46 +45,6 @@ static void DrawOnCanvas(Canvas *canvas) {
     }
 }
 
-/*
- * 
- */
-int main(int argc, char **argv) {
-    char hostname[255];
-    memset(hostname, 0, sizeof(hostname));
-    gethostname(hostname, sizeof(hostname));
-
-    std::cout << "Hi, " << hostname << "!" << std::endl;
-
-    RGBMatrix::Options defaults;
-    defaults.hardware_mapping = "adafruit-hat-pwm"; // or e.g. "adafruit-hat"
-    defaults.rows = 64;
-    defaults.cols = 64;
-    defaults.chain_length = 4;
-    defaults.pixel_mapper_config = "U-mapper";
-    defaults.parallel = 1;
-    defaults.show_refresh_rate = true;
-    Canvas *canvas = rgb_matrix::CreateMatrixFromFlags(&argc, &argv, &defaults);
-    if (canvas == NULL) {
-        std::cout << "Canvas is NULL" << std::endl;
-        return 1;
-    }
-
-    // It is always good to set up a signal handler to cleanly exit when we
-    // receive a CTRL-C for instance. The DrawOnCanvas() routine is looking
-    // for that.
-    signal(SIGTERM, InterruptHandler);
-    signal(SIGINT, InterruptHandler);
-
-    DrawOnCanvas(canvas); // Using the canvas.
-
-    // Animation finished. Shut down the RGB matrix.
-    canvas->Clear();
-    delete canvas;
-    std::cout << "Bye, " << hostname << "!" << std::endl;
-
-    return 0;
-}
-
 typedef struct meteoData {
 
     std::string city;
@@ -123,40 +83,43 @@ static void DrawOnCanvas2(Canvas *canvas) {
 
     Text cityLabel = Text("cityLabel", floatLeftLayout, meteoData.city, font);
     Text cityTempLabel = Text("cityTempLabel", floatLeftLayout, "Température :", font);
-    Text cityTempValue = Text("cityTempValue", floatRightLayout, std::to_string(meteoData.cityTemperature) + "°C",
-                              font);
+    Text cityTempValue = Text("cityTempValue", floatRightLayout, std::to_string(meteoData.cityTemperature) + "°C", font,
+                              5, 0);
     Text minTempLabel = Text("minTempLabel", floatLeftLayout, "Min :", font);
-    Text minTempValue = Text("minTempValue", floatRightLayout, std::to_string(meteoData.minTemperature) + "°C", font);
+    Text minTempValue = Text("minTempValue", floatRightLayout, std::to_string(meteoData.minTemperature) + "°C", font, 5,
+                             0);
     Text maxTempLabel = Text("maxTempLabel", floatLeftLayout, "Max :", font);
-    Text maxTempValue = Text("maxTempValue", floatRightLayout, std::to_string(meteoData.maxTemperature) + "°C", font);
+    Text maxTempValue = Text("maxTempValue", floatRightLayout, std::to_string(meteoData.maxTemperature) + "°C", font, 5,
+                             0);
     Text humidityLabel = Text("humidityLabel", floatLeftLayout, "Humidity :", font);
     Text humidityValue = Text("humidityValue", floatRightLayout, std::to_string(meteoData.humidity) + "%", font);
 
     int PANEL_WIDTH = 128;
     int PANEL_HEIGHT = 128;
     int LINE_HEIGHT = 10;
+    int LINE_WIDTH = 128;
 
     Panel meteoPanel = Panel("meteoPanel", PANEL_WIDTH, PANEL_HEIGHT, 0, 0);
     Panel cityLine = Panel("cityLine", PANEL_WIDTH, LINE_HEIGHT, 0, 0);
     cityLine.addComponent(&cityLabel);
     meteoPanel.addComponent(&cityLine);
 
-    Panel cityTempLine = Panel("cityTempLine", 0, LINE_HEIGHT, 0, LINE_HEIGHT);
+    Panel cityTempLine = Panel("cityTempLine", LINE_WIDTH, LINE_HEIGHT, 0, LINE_HEIGHT);
     cityTempLine.addComponent(&cityTempLabel);
     cityTempLine.addComponent(&cityTempValue);
     meteoPanel.addComponent(&cityTempLine);
 
-    Panel minTempLine = Panel("minTempLine", 0, LINE_HEIGHT, 0, 2 * LINE_HEIGHT);
+    Panel minTempLine = Panel("minTempLine", LINE_WIDTH, LINE_HEIGHT, 0, 2 * LINE_HEIGHT);
     minTempLine.addComponent(&minTempLabel);
     minTempLine.addComponent(&minTempValue);
     meteoPanel.addComponent(&minTempLine);
 
-    Panel maxTempLine = Panel("minTempLine", 0, LINE_HEIGHT, 0, 3 * LINE_HEIGHT);
+    Panel maxTempLine = Panel("maxTempLine", LINE_WIDTH, LINE_HEIGHT, 0, 3 * LINE_HEIGHT);
     maxTempLine.addComponent(&maxTempLabel);
     maxTempLine.addComponent(&maxTempValue);
     meteoPanel.addComponent(&maxTempLine);
 
-    Panel humidityLine = Panel("cityTempLine", 0, LINE_HEIGHT, 0, 4 * LINE_HEIGHT);
+    Panel humidityLine = Panel("humidity", LINE_WIDTH, LINE_HEIGHT, 0, 4 * LINE_HEIGHT);
     humidityLine.addComponent(&humidityLabel);
     humidityLine.addComponent(&humidityValue);
     meteoPanel.addComponent(&humidityLine);
@@ -165,5 +128,48 @@ static void DrawOnCanvas2(Canvas *canvas) {
 
     std::cout << "Drawing ..." << std::endl;
     rootPanel.draw(*canvas);
+
+    sleep(10000);
     std::cout << "Drawing DONE" << std::endl;
+}
+
+
+/*
+ *
+ */
+int main(int argc, char **argv) {
+    char hostname[255];
+    memset(hostname, 0, sizeof(hostname));
+    gethostname(hostname, sizeof(hostname));
+
+    std::cout << "Hi, " << hostname << "!" << std::endl;
+
+    RGBMatrix::Options defaults;
+    defaults.hardware_mapping = "adafruit-hat-pwm"; // or e.g. "adafruit-hat"
+    defaults.rows = 64;
+    defaults.cols = 64;
+    defaults.chain_length = 4;
+    defaults.pixel_mapper_config = "U-mapper";
+    defaults.parallel = 1;
+//    defaults.show_refresh_rate = true;
+    Canvas *canvas = rgb_matrix::CreateMatrixFromFlags(&argc, &argv, &defaults);
+    if (canvas == NULL) {
+        std::cout << "Canvas is NULL" << std::endl;
+        return 1;
+    }
+
+    // It is always good to set up a signal handler to cleanly exit when we
+    // receive a CTRL-C for instance. The DrawOnCanvas() routine is looking
+    // for that.
+    signal(SIGTERM, InterruptHandler);
+    signal(SIGINT, InterruptHandler);
+    DrawOnCanvas2(canvas);
+    DrawOnCanvas(canvas); // Using the canvas.
+
+    // Animation finished. Shut down the RGB matrix.
+    canvas->Clear();
+    delete canvas;
+    std::cout << "Bye, " << hostname << "!" << std::endl;
+
+    return 0;
 }
