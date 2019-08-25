@@ -1,8 +1,6 @@
 #include <Text.h>
 #include <iostream>
-#include <stdlib.h>
 #include "utf8-internal.h"
-#include <unistd.h>
 
 Text::Text(std::string id, Layout &layout, std::string text, rgb_matrix::Font &font) :
         Component(id, 0, 0, layout),
@@ -36,20 +34,20 @@ int Text::getHeight() const {
     return font.height();
 }
 
-void Text::draw(rgb_matrix::Canvas &canvas, const Component *parent) const {
+void Text::draw(rgb_matrix::Canvas &canvas) const {
     Color color(255, 255, 0);
     Color bg_color(0, 0, 0);
 
     int letter_spacing = 0;
     const int x = this->getLayout().getFloating() == Layout::FLOAT_LEFT
-                  ? this->xOffset()
-                  : this->xOffset() + parent->getWidth() - getWidth();
-    int y = this->yOffset();
+                  ? 0
+                  : this->getParent()->getWidth() - getWidth();
+    int y = 0;
     std::cout << "Drawing Text :: " << this->getId() << " - " << this->text
               << " pos(" << x << "," << y << ") "
               << " offset(" << this->xOffset() << "," << this->yOffset() << ") "
               << std::endl;
 
-    rgb_matrix::DrawText(&canvas, font, parent->xOffset() + x, parent->yOffset() + y + font.baseline(), color, &bg_color, this->text.c_str(), letter_spacing);
-//    sleep(3);
+    rgb_matrix::DrawText(&canvas, font, this->xOffset() + x, this->yOffset() + y + font.baseline(), color, &bg_color,
+                         this->text.c_str(), letter_spacing);
 }

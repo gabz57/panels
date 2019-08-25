@@ -7,6 +7,7 @@
 #include <canvas.h>
 #include <Component.h>
 #include <Layout.h>
+
 static Layout DEFAULT_LAYOUT = Layout(Layout::FLOAT_LEFT);
 
 class Panel : public Component {
@@ -15,15 +16,18 @@ public:
 
     virtual ~Panel();
 
-    virtual int getWidth() const; // Pixels available in x direction.
-    virtual int getHeight() const; // Pixels available in y direction.
+    virtual int getWidth() const;
 
-    void addComponent(Component* component);
-    virtual void draw(Canvas& canvas, const Component* parent) const;
+    virtual int getHeight() const;
+
+    void addComponent(Component *component);
+
+    virtual void draw(Canvas &canvas) const;
+
 private:
     int width;
     int height;
-    std::unordered_map<std::string, Component*> components;
+    std::unordered_map<std::string, Component *> components;
 };
 
 #endif /* PANEL_H */

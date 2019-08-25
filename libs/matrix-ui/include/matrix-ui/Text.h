@@ -21,7 +21,7 @@ public:
 
     virtual int getHeight() const;
 
-    virtual void draw(Canvas &canvas, const Component *parent) const;
+    virtual void draw(Canvas &canvas) const;
 
 private:
     std::string text;

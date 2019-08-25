@@ -15,11 +15,15 @@ public:
 
     bool operator==(const Component &other);
 
-    virtual void draw(Canvas &canvas, const Component *parent) const = 0;
+    virtual void draw(Canvas &canvas) const = 0;
 
     virtual int getWidth() const = 0;
 
     virtual int getHeight() const = 0;
+
+    const Component* getParent() const;
+
+    void setParent(const Component *parent);
 
     std::string getId() const;
 
@@ -35,6 +39,7 @@ private:
     int x_offset;
     int y_offset;
     Layout &layout;
+    const Component *parent = nullptr;
 };
 
 #endif /* COMPONENT_H */

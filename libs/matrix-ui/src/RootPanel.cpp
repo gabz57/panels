@@ -8,21 +8,18 @@ RootPanel::RootPanel(std::string id, int width, int height, Component &childComp
         width(width),
         height(height),
         childComponent(childComponent) {
+    childComponent.setParent(this);
 }
 
 RootPanel::~RootPanel() {
 
 }
 
-void RootPanel::draw(Canvas &canvas, const Component *parent) const {
-    this->draw(canvas);
-}
-
 void RootPanel::draw(Canvas &canvas) const {
     std::cout << std::endl<< std::endl<< "Drawing RootPanel :: " << this->getId()
               << " - w:" << this->width << ", h:" << this->height
               << std::endl;
-    this->childComponent.draw(canvas, this);
+    this->childComponent.draw(canvas);
 }
 
 int RootPanel::getWidth() const {

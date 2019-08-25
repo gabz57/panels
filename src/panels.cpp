@@ -178,13 +178,13 @@ static void DrawSensors(Canvas *canvas) {
 
     int PANEL_WIDTH = 128;
     int PANEL_HEIGHT = 128;
-    int LINE_HEIGHT = 10;
+    int LINE_HEIGHT = 8;
     int LINE_WIDTH = 128;
 
     Panel sensorPanel = Panel("sensorPanel", PANEL_WIDTH, PANEL_HEIGHT, 0, 0);
     Panel groundHumiditySensorPanel = Panel("groundHumiditySensor", PANEL_WIDTH, PANEL_HEIGHT / 2, 0, 0);
-    Panel temperatureSensorPanel = Panel("temperatureSensor", PANEL_WIDTH, PANEL_HEIGHT / 2, PANEL_HEIGHT / 2, 0);
-//    sensorPanel.addComponent(&groundHumiditySensorPanel);
+    Panel temperatureSensorPanel = Panel("temperatureSensor", PANEL_WIDTH, PANEL_HEIGHT / 2, 0, PANEL_HEIGHT / 2);
+    sensorPanel.addComponent(&groundHumiditySensorPanel);
     sensorPanel.addComponent(&temperatureSensorPanel);
 
     //// HUMIDITÉ
@@ -278,10 +278,10 @@ int main(int argc, char **argv) {
     signal(SIGTERM, InterruptHandler);
     signal(SIGINT, InterruptHandler);
     for (int i = 0; i < 100; ++i) {
-        std::cout << "Drawing 1" << std::endl;
-        canvas->Clear();
-        DrawMeteo(canvas);
-        sleep(8);
+//        std::cout << "Drawing 1" << std::endl;
+//        canvas->Clear();
+//        DrawMeteo(canvas);
+//        sleep(8);
         std::cout << "Drawing 2" << std::endl;
         canvas->Clear();
         DrawSensors(canvas);

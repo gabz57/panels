@@ -16,15 +16,29 @@ bool Component::operator==(const Component &other) {
     return this->id == other.id;
 }
 
+void Component::setParent(const Component *parentComponent) {
+    this->parent = parentComponent;
+}
+
+const Component* Component::getParent() const {
+    return this->parent;
+}
+
 std::string Component::getId() const {
     return this->id;
 }
 
 int Component::xOffset() const {
+    if (this->parent != nullptr) {
+        return this->parent->xOffset() + this->x_offset;
+    }
     return this->x_offset;
 }
 
 int Component::yOffset() const {
+    if (this->parent != nullptr) {
+        return this->parent->yOffset() + this->y_offset;
+    }
     return this->y_offset;
 }
 

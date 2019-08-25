@@ -18,10 +18,11 @@ int Panel::getHeight() const {
 
 void Panel::addComponent(Component *component) {
     // todo ensure fit inside width & height or print message + return 1
+    component->setParent(this);
     this->components.insert(std::make_pair(component->getId(), component));
 }
 
-void Panel::draw(Canvas &canvas, const Component *parent) const {
+void Panel::draw(Canvas &canvas) const {
     std::cout << "Drawing Panel :: " << this->getId()
               << " - w:" << this->width << ", h:" << this->height
               << " - x-offset:" << this->xOffset() << ", x-offset:" << this->yOffset()
@@ -31,7 +32,7 @@ void Panel::draw(Canvas &canvas, const Component *parent) const {
     it = mp.begin();
     while (it != this->components.end()) {
 //        std::cout << "--> Drawing child :: " << it->first << std::endl;
-        it->second->draw(canvas, this);
+        it->second->draw(canvas);
         it++;
     }
 }
