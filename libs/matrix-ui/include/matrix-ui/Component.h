@@ -9,7 +9,7 @@ using namespace rgb_matrix;
 
 class Component {
 public:
-    Component(std::string id, int x_offset, int y_offset, Layout &layout);
+    Component(std::string id, int x_offset, int y_offset, const Layout &layout);
 
     virtual ~Component();
 
@@ -31,14 +31,14 @@ public:
 
     int yOffset() const;
 
-    Layout &getLayout() const;
+    const Layout &getLayout() const;
 
 
 private:
     std::string id;
     int x_offset;
     int y_offset;
-    Layout &layout;
+    const Layout &layout;
     const Component *parent = nullptr;
 };
 

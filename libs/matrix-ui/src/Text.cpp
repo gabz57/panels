@@ -2,13 +2,13 @@
 #include <iostream>
 #include "utf8-internal.h"
 
-Text::Text(std::string id, Layout &layout, std::string text, rgb_matrix::Font &font) :
+Text::Text(std::string id, const Layout &layout, std::string text, rgb_matrix::Font &font) :
         Component(id, 0, 0, layout),
         text(text),
         font(font) {
 }
 
-Text::Text(std::string id, Layout &layout, std::string text, rgb_matrix::Font &font, int x_offset, int y_offset) :
+Text::Text(std::string id, const Layout &layout, std::string text, rgb_matrix::Font &font, int x_offset, int y_offset) :
         Component(id, x_offset, y_offset, layout),
         text(text),
         font(font) {
@@ -35,6 +35,8 @@ int Text::getHeight() const {
 }
 
 void Text::draw(rgb_matrix::Canvas &canvas) const {
+    std::cout << "Drawing Text :: " << this->getId() << " - " << this->text;
+
     Color color(255, 255, 0);
     Color bg_color(0, 0, 0);
 
@@ -43,8 +45,8 @@ void Text::draw(rgb_matrix::Canvas &canvas) const {
                   ? 0
                   : this->getParent()->getWidth() - getWidth();
     int y = 0;
-    std::cout << "Drawing Text :: " << this->getId() << " - " << this->text
-              << " pos(" << x << "," << y << ") "
+//    std::cout << "Drawing Text :: " << this->getId() << " - " << this->text
+    std::cout << " pos(" << x << "," << y << ") "
               << " offset(" << this->xOffset() << "," << this->yOffset() << ") "
               << std::endl;
 

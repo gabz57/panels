@@ -23,9 +23,10 @@ void Panel::addComponent(Component *component) {
 }
 
 void Panel::draw(Canvas &canvas) const {
-    std::cout << "Drawing Panel :: " << this->getId()
-              << " - w:" << this->width << ", h:" << this->height
-              << " - x-offset:" << this->xOffset() << ", x-offset:" << this->yOffset()
+    std::cout << "Drawing Panel :: ";
+    std::cout << this->getId();
+    std::cout << " - w:" << this->width << ", h:" << this->height
+              << " - x-offset:" << this->xOffset() << ", y-offset:" << this->yOffset()
               << std::endl;
     std::unordered_map<std::string, Component *> mp = this->components;
     std::unordered_map<std::string, Component *>::iterator it;

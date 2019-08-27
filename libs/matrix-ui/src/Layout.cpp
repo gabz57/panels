@@ -3,6 +3,8 @@
 
 const std::string Layout::FLOAT_LEFT = "float-left";
 const std::string Layout::FLOAT_RIGHT = "float-right";
+const Layout Layout::FLOAT_LEFT_LAYOUT = Layout(Layout::FLOAT_LEFT);
+const Layout Layout::FLOAT_RIGHT_LAYOUT = Layout(Layout::FLOAT_RIGHT);
 
 Layout::Layout(std::string floating) : floating(floating) {
 }
