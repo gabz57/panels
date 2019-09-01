@@ -1,19 +1,19 @@
 #ifndef TEXT_H
 #define TEXT_H
 
-#include <Component.h>
 #include <string>
-#include <graphics.h>
-#include <Layout.h>
 #include <canvas.h>
+#include <graphics.h>
+#include <matrix-ui/Component.h>
+#include <matrix-ui/Layout.h>
 
 using rgb_matrix::Canvas;
 
 class Text : public Component {
 public:
-    Text(std::string id, const Layout &layout, std::string text, rgb_matrix::Font &font);
+    Text(std::string id, const Layout &layout, std::string text, rgb_matrix::Font *font);
 
-    Text(std::string id, const Layout &layout, std::string text, rgb_matrix::Font &font, int x_offset, int y_offset);
+    Text(std::string id, const Layout &layout, std::string text, rgb_matrix::Font *font, int x_offset, int y_offset);
 
     virtual ~Text();
 
@@ -25,7 +25,7 @@ public:
 
 private:
     std::string text;
-    rgb_matrix::Font &font;
+    rgb_matrix::Font *font;
 };
 
 #endif /* TEXT_H */

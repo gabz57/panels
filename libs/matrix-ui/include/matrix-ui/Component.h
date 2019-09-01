@@ -2,7 +2,7 @@
 #define COMPONENT_H
 
 #include <canvas.h>
-#include <Layout.h>
+#include <matrix-ui/Layout.h>
 #include <string>
 
 using namespace rgb_matrix;

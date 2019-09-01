@@ -5,14 +5,9 @@ project(panels)
 
 include_directories(${PROJECT_SOURCE_DIR}/libs/matrix/lib)
 include_directories(${PROJECT_SOURCE_DIR}/libs/matrix/include)
-
-include_directories(${PROJECT_SOURCE_DIR}/libs/matrix-ui/src)
-include_directories(${PROJECT_SOURCE_DIR}/libs/matrix-ui/include/matrix-ui)
-
+include_directories(${PROJECT_SOURCE_DIR}/libs/matrix-ui/include)
 include_directories(${PROJECT_SOURCE_DIR}/libs/influxdb-cpp)
-
 include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${PROJECT_SOURCE_DIR}/src)
 
 file(GLOB_RECURSE RGB_SRC_FILES ${PROJECT_SOURCE_DIR}/libs/matrix/lib/*.cc)
 file(GLOB_RECURSE RGB_SRC_C_FILES ${PROJECT_SOURCE_DIR}/libs/matrix/lib/*.c)

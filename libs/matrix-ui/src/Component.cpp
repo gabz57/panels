@@ -1,4 +1,4 @@
-#include <Component.h>
+#include <matrix-ui/Component.h>
 
 using namespace rgb_matrix;
 

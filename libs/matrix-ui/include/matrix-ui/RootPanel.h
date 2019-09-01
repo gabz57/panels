@@ -3,11 +3,11 @@
 
 #include <string>
 #include <canvas.h>
-#include <Component.h>
+#include <matrix-ui/Component.h>
 
 class RootPanel : public Component {
 public:
-    RootPanel(std::string id, int width, int height, Component& childComponent);
+    RootPanel(std::string id, int width, int height, Component* childComponent);
 
     virtual ~RootPanel();
 
@@ -20,7 +20,7 @@ public:
 private:
     int width;
     int height;
-    Component& childComponent;
+    Component* childComponent;
 };
 
 #endif //PANELS_ROOTPANEL_H

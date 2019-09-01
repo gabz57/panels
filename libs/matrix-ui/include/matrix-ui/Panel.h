@@ -5,8 +5,8 @@
 #include <string>
 #include <iterator>
 #include <canvas.h>
-#include <Component.h>
-#include <Layout.h>
+#include <matrix-ui/Component.h>
+#include <matrix-ui/Layout.h>
 
 static Layout DEFAULT_LAYOUT = Layout(Layout::FLOAT_LEFT);
 
@@ -23,11 +23,12 @@ public:
     void addComponent(Component *component);
 
     virtual void draw(Canvas &canvas) const;
-
+    
+protected:
+    std::unordered_map<std::string, Component *> components;
 private:
     int width;
     int height;
-    std::unordered_map<std::string, Component *> components;
 };
 
 #endif /* PANEL_H */
