@@ -14,8 +14,6 @@
 #include <stdio.h>
 #include <signal.h>
 
-#include "influxdb.hpp"
-
 using namespace std;
 
 using rgb_matrix::GPIO;
@@ -47,25 +45,6 @@ static void DrawOnCanvas(Canvas *canvas) {
         canvas->SetPixel(center_x + dot_x, center_y + dot_y, 255, 0, 0);
         usleep(1 * 1000); // wait a little to slow down things.
     }
-}
-
-static MeteoData retrieveMeteoData() {
-    // query from table
-//    influxdb_cpp::server_info serverInfo("127.0.0.1", 8086, "", "test", "test");
-////    string resp;
-////    influxdb_cpp::query(resp, "show databases", serverInfo);
-////    cout << "show databases: " << resp << endl;
-////    influxdb_cpp::query(resp, "show databases", serverInfo);
-////    cout << "WAAAAAAAAAA" << resp << "WAAAAAAAAAA" << endl;
-    return MeteoData("Cachan", 22, 26, 14, 50);
-}
-
-static GroundHumiditySensorData retrieveGroundHumiditySensorData() {
-    return GroundHumiditySensorData("HumiditySensor", 457, true);
-}
-
-static TemperatureSensorData retrieveTemperatureSensorData() {
-    return TemperatureSensorData("TemperatureSensor", 55, 20, 21);
 }
 
 static void DrawMeteo(Canvas *canvas) {
@@ -199,7 +178,7 @@ int main(int argc, char **argv) {
     std::cout << "Hi, " << hostname << "!" << std::endl;
 
     RGBMatrix::Options defaults;
-    defaults.hardware_mapping = "adafruit-hat-pwm"; // or e.g. "adafruit-hat"
+    defaults.hardware_mapping = "adafruit-hat-pwm";
     defaults.rows = 64;
     defaults.cols = 64;
     defaults.chain_length = 4;
@@ -218,12 +197,12 @@ int main(int argc, char **argv) {
     signal(SIGTERM, InterruptHandler);
     signal(SIGINT, InterruptHandler);
     for (int i = 0; i < 100; ++i) {
-        std::cout << "Drawing 1" << std::endl;
-        canvas->Clear();
-        DrawMeteo(canvas);
         std::cout << "Drawing 2" << std::endl;
         canvas->Clear();
         DrawSensors(canvas);
+        std::cout << "Drawing 1" << std::endl;
+        canvas->Clear();
+        DrawMeteo(canvas);
     }
     std::cout << "Drawing DONE, BYE" << std::endl;
 //    DrawOnCanvas(canvas); // Using the canvas.

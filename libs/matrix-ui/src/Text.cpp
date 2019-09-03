@@ -37,7 +37,7 @@ int Text::getHeight() const {
 void Text::draw(rgb_matrix::Canvas &canvas) const {
 //    std::cout << "Drawing Text :: " << this->getId() << " - " << this->text;
 
-    Color color(255, 255, 0);
+    Color color(0, 0, 255);
     Color bg_color(0, 0, 0);
 
     int letter_spacing = 0;
