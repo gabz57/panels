@@ -3,6 +3,8 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(panels)
 
+add_subdirectory(libs/cpp-netlib)
+
 include_directories(${PROJECT_SOURCE_DIR}/libs/matrix/lib)
 include_directories(${PROJECT_SOURCE_DIR}/libs/matrix/include)
 include_directories(${PROJECT_SOURCE_DIR}/libs/matrix-ui/include)

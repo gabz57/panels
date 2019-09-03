@@ -2,13 +2,13 @@
 #include <iostream>
 #include "utf8-internal.h"
 
-Text::Text(std::string id, const Layout &layout, std::string text, rgb_matrix::Font *font) :
+Text::Text(std::string id, const Layout &layout, std::string text, const rgb_matrix::Font *font) :
         Component(id, 0, 0, layout),
         text(text),
         font(font) {
 }
 
-Text::Text(std::string id, const Layout &layout, std::string text, rgb_matrix::Font *font, int x_offset, int y_offset) :
+Text::Text(std::string id, const Layout &layout, std::string text, const rgb_matrix::Font *font, int x_offset, int y_offset) :
         Component(id, x_offset, y_offset, layout),
         text(text),
         font(font) {

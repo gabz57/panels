@@ -47,24 +47,8 @@ static void DrawOnCanvas(Canvas *canvas) {
     }
 }
 
-static void DrawMeteo(Canvas *canvas) {
+Panel *buildMeteoPanel(const Font *font, int PANEL_WIDTH, int PANEL_HEIGHT, int LINE_HEIGHT, int LINE_WIDTH) {
     const MeteoData meteoData = retrieveMeteoData();
-    /*
-     * Load font. This needs to be a filename with a bdf bitmap font.
-     */
-    const char *bdf_font_file = "/home/pi/Desktop/leds/rpi-rgb-led-matrix/fonts/5x7.bdf";
-    rgb_matrix::Font *font = new Font();
-    if (!font->LoadFont(bdf_font_file)) {
-        fprintf(stderr, "Couldn't load font '%s'\n", bdf_font_file);
-//        return 1;
-        return;
-    }
-
-    int PANEL_WIDTH = 128;
-    int PANEL_HEIGHT = 128;
-    int LINE_HEIGHT = 10;
-    int LINE_WIDTH = 128;
-
     Panel *meteoPanel = new Panel("meteoPanel", PANEL_WIDTH, PANEL_HEIGHT, 0, 0);
 
     meteoPanel->addComponent(new TextLine("cityLine", meteoData.city, "",
@@ -79,46 +63,20 @@ static void DrawMeteo(Canvas *canvas) {
     meteoPanel->addComponent(new TemperatureLine("maxTemperature", "Max :",
                                                  meteoData.maxTemperature,
                                                  font, LINE_WIDTH, LINE_HEIGHT, 0, 3 * LINE_HEIGHT));
-    meteoPanel->addComponent(new TextLine("humidity", "Humidité :", std::to_string(meteoData.humidity) + "%",
+    meteoPanel->addComponent(new TextLine("humidity", "Humidité :", to_string(meteoData.humidity) + "%",
                                           font, LINE_WIDTH, LINE_HEIGHT, 0, 4 * LINE_HEIGHT));
-
-    RootPanel *rootPanel = new RootPanel("rootPanel", PANEL_WIDTH, PANEL_HEIGHT, meteoPanel);
-
-    std::cout << "Drawing ..." << std::endl;
-//    canvas->Fill(0, 0, 255);
-    rootPanel->draw(*canvas);
-    sleep(8);
-    std::cout << "Drawing DONE" << std::endl;
-    delete rootPanel;
-    std::cout << "delete DONE" << std::endl;
+    return meteoPanel;
 }
 
-static void DrawSensors(Canvas *canvas) {
-    std::cout << "Drawing Sensors BEGIN" << std::endl;
-
-    /*
-     * Load font. This needs to be a filename with a bdf bitmap font.
-     */
-    const char *bdf_font_file = "/home/pi/Desktop/leds/rpi-rgb-led-matrix/fonts/5x7.bdf";
-    rgb_matrix::Font *font = new Font();
-    if (!font->LoadFont(bdf_font_file)) {
-        fprintf(stderr, "Couldn't load font '%s'\n", bdf_font_file);
-//        return 1;
-        return;
-    }
+Panel *buildSensorPanel(const Font *font, int PANEL_WIDTH, int PANEL_HEIGHT, int LINE_HEIGHT, int LINE_WIDTH) {
 
     const GroundHumiditySensorData groundHumiditySensorData = retrieveGroundHumiditySensorData();
     const TemperatureSensorData temperatureSensorData = retrieveTemperatureSensorData();
 
-    int PANEL_WIDTH = 128;
-    int PANEL_HEIGHT = 128;
-    int LINE_HEIGHT = 8;
-    int LINE_WIDTH = 128;
-
     Panel *mainPanel = new Panel("sensorPanel", PANEL_WIDTH, PANEL_HEIGHT, 0, 0);
 
     //// BLOC HUMIDITÉ
-    std::cout << "Drawing Sensors assembling panel humidity" << std::endl;
+    cout << "Drawing Sensors assembling panel humidity" << endl;
     Panel *upperPanel = new Panel("groundHumiditySensor", PANEL_WIDTH, PANEL_HEIGHT / 2, 0, 0);
 
     upperPanel->addComponent(new TextLine("titleLine", "Capteurs :", "",
@@ -130,7 +88,7 @@ static void DrawSensors(Canvas *canvas) {
     upperPanel->addComponent(new TextLine("groundHumiditySensorName", groundHumiditySensorData.name, "",
                                           font, LINE_WIDTH, LINE_HEIGHT, 0, 4 * LINE_HEIGHT));
     upperPanel->addComponent(
-            new TextLine("groundHumidityLine", "Humidité :", std::to_string(groundHumiditySensorData.humidity) + ".",
+            new TextLine("groundHumidityLine", "Humidité :", to_string(groundHumiditySensorData.humidity) + ".",
                          font, LINE_WIDTH, LINE_HEIGHT, 0, 5 * LINE_HEIGHT));
     upperPanel->addComponent(new TextLine("groundDryLine", "Sécheresse :", groundHumiditySensorData.dry ? "OUI" : "NON",
                                           font, LINE_WIDTH, LINE_HEIGHT, 0, 6 * LINE_HEIGHT));
@@ -138,7 +96,7 @@ static void DrawSensors(Canvas *canvas) {
     mainPanel->addComponent(upperPanel);
 
     //// BLOC TEMPERATURE
-    std::cout << "Drawing Sensors assembling panel temperature" << std::endl;
+    cout << "Drawing Sensors assembling panel temperature" << endl;
     Panel *lowerPanel = new Panel("temperatureSensor", PANEL_WIDTH, PANEL_HEIGHT / 2, 0, PANEL_HEIGHT / 2);
 
     lowerPanel->addComponent(new TextLine("temperatureSensorName", "Température pièce :", "",
@@ -154,20 +112,11 @@ static void DrawSensors(Canvas *canvas) {
                                                  temperatureSensorData.heatIndexCelcius,
                                                  font, LINE_WIDTH, LINE_HEIGHT, 0, 6 * LINE_HEIGHT));
     lowerPanel->addComponent(new TextLine("humidity", "Humidité :",
-                                          std::to_string(temperatureSensorData.humidity) + "%",
+                                          to_string(temperatureSensorData.humidity) + "%",
                                           font, LINE_WIDTH, LINE_HEIGHT, 0, 7 * LINE_HEIGHT));
 
     mainPanel->addComponent(lowerPanel);
-
-    RootPanel *rootPanel = new RootPanel("rootPanel", PANEL_WIDTH, PANEL_HEIGHT, mainPanel);
-
-    std::cout << "Drawing Sensors ..." << std::endl;
-//    canvas->Fill(0, 0, 255);
-    rootPanel->draw(*canvas);
-    sleep(8);
-    std::cout << "Drawing Sensors DONE" << std::endl;
-    delete rootPanel;
-    std::cout << "delete DONE" << std::endl;
+    return mainPanel;
 }
 
 int main(int argc, char **argv) {
@@ -185,31 +134,70 @@ int main(int argc, char **argv) {
     defaults.pixel_mapper_config = "U-mapper;Rotate:180";
     defaults.parallel = 1;
 //    defaults.show_refresh_rate = true;
-    Canvas *canvas = rgb_matrix::CreateMatrixFromFlags(&argc, &argv, &defaults);
-    if (canvas == NULL) {
+    RGBMatrix *matrix = rgb_matrix::CreateMatrixFromFlags(&argc, &argv, &defaults);
+    if (matrix == NULL) {
         std::cout << "Canvas is NULL" << std::endl;
         return 1;
     }
+
+    int panelWidth = 128;
+    int panelHeight = 128;
+    int lineHeight = 8;
+    int lineWidth = 128;
 
     // It is always good to set up a signal handler to cleanly exit when we
     // receive a CTRL-C for instance. The DrawOnCanvas() routine is looking
     // for that.
     signal(SIGTERM, InterruptHandler);
     signal(SIGINT, InterruptHandler);
-    for (int i = 0; i < 100; ++i) {
-        std::cout << "Drawing 2" << std::endl;
-        canvas->Clear();
-        DrawSensors(canvas);
-        std::cout << "Drawing 1" << std::endl;
-        canvas->Clear();
-        DrawMeteo(canvas);
+
+    /*
+     * Load font. This needs to be a filename with a bdf bitmap font.
+     */
+    const char *bdf_font_file = "/home/pi/Desktop/leds/rpi-rgb-led-matrix/fonts/5x7.bdf";
+    rgb_matrix::Font *font = new Font();
+    if (!font->LoadFont(bdf_font_file)) {
+        fprintf(stderr, "Couldn't load font '%s'\n", bdf_font_file);
+        return 1;
     }
-    std::cout << "Drawing DONE, BYE" << std::endl;
-//    DrawOnCanvas(canvas); // Using the canvas.
+
+    FrameCanvas *offscreen = matrix->CreateFrameCanvas();
+
+    RootPanel *sensorPanel = nullptr;
+    RootPanel *meteoPanel = nullptr;
+
+    cout << "Drawing BEGIN" << endl;
+    for (int i = 0; i < 100; ++i) {
+        delete sensorPanel;
+        sensorPanel = new RootPanel("sensorPanel", panelWidth, panelHeight,
+                                    buildSensorPanel(font, panelWidth, panelHeight, lineHeight, lineWidth));
+
+        cout << "Drawing Sensors ..." << endl;
+        offscreen->Clear();
+        sensorPanel->draw(*offscreen);
+        offscreen = matrix->SwapOnVSync(offscreen);
+        cout << "Drawing Sensors DONE" << endl;
+
+        sleep(8);
+
+        delete meteoPanel;
+        meteoPanel = new RootPanel("meteoPanel", panelWidth, panelHeight,
+                                   buildMeteoPanel(font, panelWidth, panelHeight, lineHeight, lineWidth));
+        cout << "Drawing Meteo..." << endl;
+        offscreen->Clear();
+        meteoPanel->draw(*offscreen);
+        offscreen = matrix->SwapOnVSync(offscreen);
+        cout << "Drawing Meteo DONE" << endl;
+
+        sleep(8);
+    }
 
     // Animation finished. Shut down the RGB matrix.
-    canvas->Clear();
-    delete canvas;
+    matrix->Clear();
+    delete sensorPanel;
+    delete meteoPanel;
+    delete matrix;
+    delete font;
     std::cout << "Bye, " << hostname << "!" << std::endl;
 
     return 0;
