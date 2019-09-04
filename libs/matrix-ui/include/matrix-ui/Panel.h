@@ -22,7 +22,7 @@ public:
 
     void addComponent(Component *component);
 
-    virtual void draw(Canvas &canvas) const;
+    virtual void draw(Canvas &canvas);
     
 protected:
     std::unordered_map<std::string, Component *> components;

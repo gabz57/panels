@@ -11,7 +11,7 @@ public:
 
     virtual ~RootPanel();
 
-    virtual void draw(Canvas &canvas) const;
+    virtual void draw(Canvas &canvas);
 
     virtual int getWidth() const;
 

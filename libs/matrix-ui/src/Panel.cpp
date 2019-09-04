@@ -29,7 +29,7 @@ void Panel::addComponent(Component *component) {
     this->components.insert(std::make_pair(component->getId(), component));
 }
 
-void Panel::draw(Canvas &canvas) const {
+void Panel::draw(Canvas &canvas) {
 //    std::cout << "Drawing Panel :: ";
 //    std::cout << this->getId();
 //    std::cout << " - w:" << this->width << ", h:" << this->height

@@ -15,7 +15,7 @@ RootPanel::~RootPanel() {
     delete childComponent;
 }
 
-void RootPanel::draw(Canvas &canvas) const {
+void RootPanel::draw(Canvas &canvas) {
     std::cout << std::endl<< std::endl<< "Drawing RootPanel :: " << this->getId()
               << " - w:" << this->width << ", h:" << this->height
               << std::endl;

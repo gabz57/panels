@@ -34,22 +34,26 @@ int Text::getHeight() const {
     return font->height();
 }
 
-void Text::draw(rgb_matrix::Canvas &canvas) const {
+void Text::draw(rgb_matrix::Canvas &canvas) {
 //    std::cout << "Drawing Text :: " << this->getId() << " - " << this->text;
 
     Color color(0, 0, 255);
     Color bg_color(0, 0, 0);
 
     int letter_spacing = 0;
-    const int x = this->getLayout().getFloating() == Layout::FLOAT_LEFT
-                  ? 0
-                  : this->getParent()->getWidth() - getWidth();
-    int y = 0;
+
+    int x = this->xOffset();
+    int y = this->yOffset();
+
+    // Apply layout
+    x += this->getLayout().getFloating() == Layout::FLOAT_LEFT
+                           ? 0
+                           : this->getParent()->getWidth() - getWidth();
+
 //    std::cout << "Drawing Text :: " << this->getId() << " - " << this->text
 //    std::cout << " pos(" << x << "," << y << ") "
 //              << " offset(" << this->xOffset() << "," << this->yOffset() << ") "
 //              << std::endl;
 
-    rgb_matrix::DrawText(&canvas, *font, this->xOffset() + x, this->yOffset() + y + font->baseline(), color, &bg_color,
-                         this->text.c_str(), letter_spacing);
+    rgb_matrix::DrawText(&canvas, *font, x, y + font->baseline(), color, &bg_color, this->text.c_str(), letter_spacing);
 }

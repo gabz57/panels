@@ -15,7 +15,7 @@ public:
 
     bool operator==(const Component &other);
 
-    virtual void draw(Canvas &canvas) const = 0;
+    virtual void draw(Canvas &canvas) = 0;
 
     virtual int getWidth() const = 0;
 
