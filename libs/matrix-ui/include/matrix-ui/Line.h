@@ -2,10 +2,10 @@
 #define LINE_H
 
 #include <string>
-#include <canvas.h>
 #include <graphics.h>
 #include <matrix-ui/Component.h>
 #include <matrix-ui/Layout.h>
+#include <matrix-ui/CanvasHolder.h>
 
 using rgb_matrix::Canvas;
 
@@ -19,6 +19,10 @@ public:
     virtual int getWidth() const;
 
     virtual int getHeight() const;
+
+    virtual void draw(CanvasHolder &canvasHandler) {
+        draw(*canvasHandler.getCanvas());
+    }
 
     virtual void draw(Canvas &canvas);
 

@@ -15,11 +15,11 @@ Line::Line(std::string id, int x_start, int y_start, int x_end, int y_end) :
 }
 
 Line::Line(std::string id, int x_start, int y_start, int x_end, int y_end, int x_offset, int y_offset) :
-      Component(id, x_offset, y_offset, DEFAULT_LINE_LAYOUT),
-      x_start(x_start),
-      y_start(y_start),
-      x_end(x_end),
-      y_end(y_end) {
+        Component(id, x_offset, y_offset, DEFAULT_LINE_LAYOUT),
+        x_start(x_start),
+        y_start(y_start),
+        x_end(x_end),
+        y_end(y_end) {
 }
 
 Line::~Line() {
@@ -33,7 +33,7 @@ int Line::getHeight() const {
     return abs(y_end - y_start);
 }
 
-void Line::draw(rgb_matrix::Canvas &canvas) {
+void Line::draw(Canvas &canvas) {
     Color color(255, 0, 0);
     int x = this->xOffset();
     int y = this->yOffset();

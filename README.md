@@ -11,8 +11,8 @@ git submodule add https://github.com/Tencent/rapidjson.git rapidjson
 
 ## Add *cpp-netlib* as a Git module
 ```shell
-git submodule add https://github.com/cpp-netlib/cpp-netlib.git cpp-netlib
-cd cpp-netlib
+git submodule add https://github.com/cpp-netlib/cpp-netlib.git cppnetlib
+cd cppnetlib
 git submodule init
 git submodule update
 ```

@@ -9,8 +9,9 @@
 
 class TemperatureLine : public TextLine {
 public:
-    TemperatureLine(std::string id, std::string label, int temperature, const rgb_matrix::Font *font, int width,
-                    int height, int x_offset = 0, int y_offset = 0, Layout &layout = DEFAULT_LAYOUT);
+    TemperatureLine(std::string id, std::string label, int temperature, const rgb_matrix::Font *font,
+                    int width, int height,
+                    int x_offset = 0, int y_offset = 0, Layout &layout = DEFAULT_LAYOUT);
 
     virtual ~TemperatureLine();
 

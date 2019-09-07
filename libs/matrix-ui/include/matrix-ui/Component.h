@@ -1,8 +1,8 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include <canvas.h>
 #include <matrix-ui/Layout.h>
+#include <matrix-ui/CanvasHolder.h>
 #include <string>
 
 using namespace rgb_matrix;
@@ -15,13 +15,17 @@ public:
 
     bool operator==(const Component &other);
 
+    virtual void draw(CanvasHolder &canvasHandler) {
+        draw(*canvasHandler.getCanvas());
+    }
+
     virtual void draw(Canvas &canvas) = 0;
 
     virtual int getWidth() const = 0;
 
     virtual int getHeight() const = 0;
 
-    const Component* getParent() const;
+    const Component *getParent() const;
 
     void setParent(const Component *parent);
 

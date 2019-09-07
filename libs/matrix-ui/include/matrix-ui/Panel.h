@@ -4,8 +4,8 @@
 #include <unordered_map>
 #include <string>
 #include <iterator>
-#include <canvas.h>
 #include <matrix-ui/Component.h>
+#include <matrix-ui/CanvasHolder.h>
 #include <matrix-ui/Layout.h>
 
 static Layout DEFAULT_LAYOUT = Layout(Layout::FLOAT_LEFT);
@@ -22,8 +22,12 @@ public:
 
     void addComponent(Component *component);
 
+    virtual void draw(CanvasHolder &canvasHandler) {
+        draw(*canvasHandler.getCanvas());
+    }
+
     virtual void draw(Canvas &canvas);
-    
+
 protected:
     std::unordered_map<std::string, Component *> components;
 private:
