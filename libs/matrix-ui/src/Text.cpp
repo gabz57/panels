@@ -2,13 +2,13 @@
 #include <iostream>
 #include "utf8-internal.h"
 
-Text::Text(std::string id, const Layout &layout, std::string text, const rgb_matrix::Font *font) :
+Text::Text(std::string id, std::string text, const rgb_matrix::Font *font, const Layout &layout) :
         Component(id, 0, 0, layout),
         text(text),
         font(font) {
 }
 
-Text::Text(std::string id, const Layout &layout, std::string text, const rgb_matrix::Font *font, int x_offset,
+Text::Text(std::string id, std::string text, const rgb_matrix::Font *font, const Layout &layout, int x_offset,
            int y_offset) :
         Component(id, x_offset, y_offset, layout),
         text(text),
@@ -36,7 +36,7 @@ int Text::getHeight() const {
 }
 
 void Text::draw(Canvas &canvas) {
-    std::cout << "Drawing Text :: " << this->getId() << " - " << this->text;
+ //   std::cout << "Drawing Text :: " << this->getId() << " - " << this->text << std::endl;
 
     Color color(0, 0, 255);
     Color bg_color(0, 0, 0);

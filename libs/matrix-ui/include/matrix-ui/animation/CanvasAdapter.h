@@ -9,7 +9,7 @@
 
 class CanvasAdapter : public rgb_matrix::Canvas {
 public:
-    CanvasAdapter(Component* component, rgb_matrix::Canvas *canvas, std::list<PixelTransformer *> &transformers) : component(component), delegatee_(canvas) {
+    CanvasAdapter(rgb_matrix::Canvas *canvas, std::list<PixelTransformer *> &transformers) : delegatee_(canvas) {
         this->transformers.assign(transformers.begin(), transformers.end());
     }
 
@@ -54,7 +54,6 @@ public:
     }
 
 private:
-    Component* component;
     std::list<PixelTransformer *> transformers;
     rgb_matrix::Canvas *const delegatee_;
 };

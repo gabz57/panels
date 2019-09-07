@@ -29,8 +29,10 @@ public:
 //    }
 
     void Step() {
-        progress++;
-        progress %= max;
+        if (progress < max) {
+            progress++;
+        }
+//        progress %= max;
     }
 
     virtual void MapPixel(int x, int y, int *matrix_x, int *matrix_y) {

@@ -2,6 +2,9 @@
 #include "matrix-ui/Component.h"
 #include "led-matrix.h"
 #include "matrix-ui/animation/CanvasAdapter.h"
+#include <iostream>
+
+using namespace std;
 
 AnimatedComponent::AnimatedComponent(std::string id, RGBMatrix *matrix,
                                      int x_offset, int y_offset, const Layout &layout) :
@@ -46,13 +49,13 @@ void AnimatedComponent::Run() {
     tmillis_t anim_delay_ms;
     tmillis_t time_already_spent;
 
-    CanvasAdapter transformCanvas = CanvasAdapter(this, canvasHandler->getCanvas(), transformers);
+    CanvasAdapter transformCanvas = CanvasAdapter(canvasHandler->getCanvas(), transformers);
 
     anim_delay_ms = render(delay_us, transformCanvas);
 
     time_already_spent = GetTimeInMillis() - start_wait_ms;
     SleepMillis(anim_delay_ms - time_already_spent);
-
+    cout << "AnimatedComponent::Run ..." << endl;
     while (running() && /*!interrupt_received && */ GetTimeInMillis() <= end_time_ms) {
         start_wait_ms = GetTimeInMillis();
         transformCanvas.Clear();
@@ -60,6 +63,7 @@ void AnimatedComponent::Run() {
 
         // advance this component tranformers to build the next canvas
         for (PixelTransformer *transformer : transformers) {
+//            cout << "AnimatedComponent::Run transformer->Step" << endl;
             transformer->Step();
         }
         time_already_spent = GetTimeInMillis() - start_wait_ms;
@@ -67,6 +71,7 @@ void AnimatedComponent::Run() {
         SleepMillis(anim_delay_ms - time_already_spent);
         // usleep(15 * 1000);
     }
+    cout << "AnimatedComponent::Run DONE" << endl;
 }
 
 tmillis_t AnimatedComponent::render(uint32_t &delay_us, Canvas &canvasTransformer) {

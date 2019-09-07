@@ -6,7 +6,7 @@ ScrollingText::ScrollingText(std::string id, RGBMatrix *matrix,
                              int x_offset, int y_offset,
                              const Layout &layout) :
         AnimatedComponent(id + "-animation", matrix, x_offset, y_offset, Layout::FLOAT_LEFT_LAYOUT),
-        text(Text(id + "-text", layout, text, font, 0, 0)) {
+        text(Text(id + "-text", text, font, layout, 0, 0)) {
     this->text.setParent(this);
     // TODO: enhance values, or allow passing x & y by constructor
     this->transformers.push_back(new TranslationTransformer(-100));

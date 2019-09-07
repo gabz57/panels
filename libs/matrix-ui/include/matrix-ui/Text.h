@@ -7,13 +7,17 @@
 #include <matrix-ui/Layout.h>
 #include <matrix-ui/CanvasHolder.h>
 
+static Layout DEFAULT_TEXT_LAYOUT = Layout(Layout::FLOAT_LEFT);
+
 using rgb_matrix::Canvas;
 
 class Text : public Component {
 public:
-    Text(std::string id, const Layout &layout, std::string text, const rgb_matrix::Font *font);
+    Text(std::string id, std::string text, const rgb_matrix::Font *font, const Layout &layout = DEFAULT_TEXT_LAYOUT);
 
-    Text(std::string id, const Layout &layout, std::string text, const rgb_matrix::Font *font, int x_offset, int y_offset);
+    Text(std::string id, std::string text, const rgb_matrix::Font *font, const Layout &layout = DEFAULT_TEXT_LAYOUT,
+         int x_offset = 0,
+         int y_offset = 0);
 
     virtual ~Text();
 

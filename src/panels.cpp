@@ -9,6 +9,7 @@
 #include <matrix-ui/CanvasHolder.h>
 #include <matrix-ui/animation/basic/ScrollingText.h>
 #include <matrix-ui/animation/transformer/TranslatonTransformer.h>
+#include <matrix-ui/animation/transformer/RotationTransformer.h>
 #include <matrix-ui/animation/AnimationComponent.h>
 
 #include <unistd.h>
@@ -32,16 +33,24 @@ Panel *buildAnimationPanel(const Font *font, int PANEL_WIDTH, int PANEL_HEIGHT, 
     Panel *animationPanel = new Panel("animationPanel", PANEL_WIDTH, PANEL_HEIGHT, 0, 0);
 
     TextLine *textLine = new TextLine("cityLine", "How are you ?", "Fine ?", font, LINE_WIDTH, LINE_HEIGHT, 0, 0);
-    TranslationTransformer *translationTransformer = new TranslationTransformer(0, -20);
-    uint8_t duration = 3000;
-    AnimationComponent *animComponent = new AnimationComponent(textLine, translationTransformer, duration);
+    TranslationTransformer *translationTransformer = new TranslationTransformer(20, 20);
+    AnimationComponent *animComponent = new AnimationComponent(textLine, translationTransformer, 20, 5000);
     animationPanel->addComponent(animComponent);
 
     TextLine *textLine2 = new TextLine("cityLine2", "Oh yeah !", "++", font, LINE_WIDTH, LINE_HEIGHT, 0, LINE_HEIGHT);
-    TranslationTransformer *translationTransformer2 = new TranslationTransformer(0, -30);
-    uint8_t duration2 = 2000;
-    AnimationComponent *animComponent2 = new AnimationComponent(textLine2, translationTransformer2, duration2);
+    TranslationTransformer *translationTransformer2 = new TranslationTransformer(0, 30);
+    AnimationComponent *animComponent2 = new AnimationComponent(textLine2, translationTransformer2, 30, 2000);
     animationPanel->addComponent(animComponent2);
+
+    Text *text = new Text("wordLine", "Oh yeah !", font, DEFAULT_TEXT_LAYOUT, 64, 64);
+    RotationTransformer *rotationTransformer = new RotationTransformer(360, 64, 64);
+    TranslationTransformer *translationTransformer3 = new TranslationTransformer(20, 20);
+    std::list<PixelTransformer *> transformers =  std::list<PixelTransformer *>();
+    transformers.push_back(rotationTransformer);
+    transformers.push_back(translationTransformer3);
+
+    AnimationComponent *animComponent3 = new AnimationComponent(text, &transformers, 180, 2000);
+    animationPanel->addComponent(animComponent3);
 
     return animationPanel;
 }
@@ -138,7 +147,7 @@ int runPanels(int argc, char **argv) {
         return 1;
     }
 
-    int panelWidth =  matrix->width();
+    int panelWidth = matrix->width();
     int panelHeight = matrix->height();
 
     /*
@@ -197,7 +206,7 @@ int runAnimatedPanels(int argc, char **argv) {
         return 1;
     }
 
-    int panelWidth =  matrix->width();
+    int panelWidth = matrix->width();
     int panelHeight = matrix->height();
 
     /*
@@ -209,19 +218,28 @@ int runAnimatedPanels(int argc, char **argv) {
         fprintf(stderr, "Couldn't load font '%s'\n", bdf_font_file);
         return 1;
     }
-    int lineHeight = font->height() +1;
+    int lineHeight = font->height() + 1;
     int lineWidth = panelWidth;
 
     CanvasHolder canvasHandler(matrix);
 
     RootPanel animatedPanelRoot = RootPanel("animationPanel", panelWidth, panelHeight, canvasHandler,
-                                                 buildAnimationPanel(font, panelWidth, panelHeight, lineHeight, lineWidth));
+                                            buildAnimationPanel(font, panelWidth, panelHeight, lineHeight, lineWidth));
 
+    int nbSeconds = 3;
+    int fps = 100;
+    int refreshNb = nbSeconds * fps;
+    int usleepTime = 1000000 / fps;
     cout << "Drawing animation ..." << endl;
-    animatedPanelRoot.render();
-//    canvasHandler.clear();
-//    animatedPanelRoot.draw(canvasHandler);
-//    //canvasHandler.renderAndSwap(); // for static use
+    for (int i = 0; i < refreshNb; i++) {
+        tmillis_t start_wait_ms =  GetTimeInMillis();
+        animatedPanelRoot.render();
+        tmillis_t time_already_spent = GetTimeInMillis() - start_wait_ms;
+        usleep(usleepTime - time_already_spent / 1000);
+    }
+    //    canvasHandler.clear();
+    //    animatedPanelRoot.draw(canvasHandler);
+    //    //canvasHandler.renderAndSwap(); // for static use
 
     cout << "Drawing animation inited... main thread entering sleep" << endl;
     sleep(360);
