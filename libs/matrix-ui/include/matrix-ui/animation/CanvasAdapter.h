@@ -29,10 +29,10 @@ public:
         }
 
 // <=> // if (x_mod >= min_display_x && x_mod < max_display_x && y_mod >= min_display_y && y_mod < max_display_y) {
-        if (x_mod >= 0 && x_mod < delegatee_->width()
-         && y_mod >= 0 && y_mod < delegatee_->height()) {
+//        if (x_mod >= 0 && x_mod < delegatee_->width()
+//         && y_mod >= 0 && y_mod < delegatee_->height()) {
             delegatee_->SetPixel(x_mod, y_mod, red, green, blue);
-        }
+//        }
     }
 
 //    rgb_matrix::Color GetPixel(int x, int y);

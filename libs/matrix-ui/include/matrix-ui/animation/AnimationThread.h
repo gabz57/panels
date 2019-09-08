@@ -3,6 +3,7 @@
 
 #include <led-matrix.h>
 #include <thread.h>
+#include <list>
 #include <matrix-ui/animation/LocalTime.h>
 #include <matrix-ui/animation/transformer/PixelTransformer.h>
 
@@ -40,7 +41,7 @@ public:
         cout << "Animation Thread STARTED" << endl;
         tmillis_t start_ms = GetTimeInMillis();
 
-        while (running() && /*!interrupt_received && */ (GetTimeInMillis() - start_ms)<= *duration_ms) {
+        while (running() && !interrupt_received && (GetTimeInMillis() - start_ms)<= *duration_ms) {
 //            tmillis_t start_wait_ms = GetTimeInMillis();
             MutexLock *m = new MutexLock(animation_mutex_);
 

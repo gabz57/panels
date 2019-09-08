@@ -1,5 +1,5 @@
 #include "matrix-ui/TemperatureLine.h"
-#include "matrix-ui/Text.h"
+#include "matrix-ui/shape/Text.h"
 
 TemperatureLine::TemperatureLine(std::string id, std::string label, int temperature, const rgb_matrix::Font *font,
                                  int width, int height, int x_offset, int y_offset, Layout &layout) :

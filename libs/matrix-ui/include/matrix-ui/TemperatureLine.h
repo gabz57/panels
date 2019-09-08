@@ -4,7 +4,7 @@
 #include <string>
 #include <canvas.h>
 #include <graphics.h>
-#include <matrix-ui/TextLine.h>
+#include <matrix-ui/shape/TextLine.h>
 #include <matrix-ui/Layout.h>
 
 class TemperatureLine : public TextLine {

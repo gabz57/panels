@@ -10,6 +10,7 @@
 #include "influxdb.hpp"
 
 using namespace std;
+static volatile bool interrupt_received = false;
 
 typedef struct meteoData {
     std::string city;

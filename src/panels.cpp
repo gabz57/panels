@@ -3,11 +3,11 @@
 #include <panels/panels.h>
 #include <matrix-ui/Panel.h>
 #include <matrix-ui/RootPanel.h>
-#include <matrix-ui/Text.h>
+#include <matrix-ui/shape/Text.h>
+#include <matrix-ui/shape/Dot.h>
 #include <matrix-ui/TemperatureLine.h>
-#include <matrix-ui/TextLine.h>
+#include <matrix-ui/shape/TextLine.h>
 #include <matrix-ui/CanvasHolder.h>
-#include <matrix-ui/animation/basic/ScrollingText.h>
 #include <matrix-ui/animation/transformer/TranslatonTransformer.h>
 #include <matrix-ui/animation/transformer/RotationTransformer.h>
 #include <matrix-ui/animation/AnimationComponent.h>
@@ -23,7 +23,6 @@ using rgb_matrix::RGBMatrix;
 using rgb_matrix::Canvas;
 
 // to use in main while loop
-volatile bool interrupt_received = false;
 
 static void InterruptHandler(int signo) {
     interrupt_received = true;
@@ -42,15 +41,38 @@ Panel *buildAnimationPanel(const Font *font, int PANEL_WIDTH, int PANEL_HEIGHT, 
     AnimationComponent *animComponent2 = new AnimationComponent(textLine2, translationTransformer2, 30, 2000);
     animationPanel->addComponent(animComponent2);
 
-    Text *text = new Text("wordLine", "Oh yeah !", font, DEFAULT_TEXT_LAYOUT, 64, 64);
-    RotationTransformer *rotationTransformer = new RotationTransformer(360, 64, 64);
-    TranslationTransformer *translationTransformer3 = new TranslationTransformer(20, 20);
-    std::list<PixelTransformer *> transformers =  std::list<PixelTransformer *>();
-    transformers.push_back(rotationTransformer);
-    transformers.push_back(translationTransformer3);
+//    Text *text = new Text("wordLine", "Oh yeah !", font, DEFAULT_TEXT_LAYOUT, 64, 64);
+//    std::list<PixelTransformer *> transformers =  std::list<PixelTransformer *>();
+//    transformers.push_back(rotationTransformer);
+//    transformers.push_back(translationTransformer3);
+    Text *text = new Text("wordLine", "Oh yeah !", font, DEFAULT_TEXT_LAYOUT, 16, 16);
+    RotationTransformer *rotationTransformer = new RotationTransformer(360, 16, 16);
+    AnimationComponent *subAnimComponent = new AnimationComponent(text, rotationTransformer, 360, 4000);
 
-    AnimationComponent *animComponent3 = new AnimationComponent(text, &transformers, 180, 2000);
-    animationPanel->addComponent(animComponent3);
+    TranslationTransformer *translationTransformer3 = new TranslationTransformer(32, 32);
+    AnimationComponent *animComponent3 = new AnimationComponent(subAnimComponent, translationTransformer3, 32, 4000);
+    RotationTransformer *rotationTransformer2 = new RotationTransformer(360, 64, 64);
+    AnimationComponent *parentAnimComponent = new AnimationComponent(animComponent3, rotationTransformer2, 360, 2000);
+    animationPanel->addComponent(parentAnimComponent);
+
+    Dot *dot = new Dot("dot", 0, 0);
+    Dot *dot2 = new Dot("dot2", 0, 32);
+    Dot *dot3 = new Dot("dot3", 0, 46);
+    Dot *dot4 = new Dot("dot4", 0, 54);
+
+    Panel *panel = new Panel("secondsPanel", PANEL_WIDTH, PANEL_HEIGHT, 0, 0);
+    panel->addComponent(dot);
+    panel->addComponent(dot2);
+    panel->addComponent(dot3);
+    panel->addComponent(dot4);
+    RotationTransformer *rotationTransformer3 = new RotationTransformer(4 * 360, 0, 64);
+    AnimationComponent *animComponent4 = new AnimationComponent(panel, rotationTransformer3, 4 * 360, 4 * 60000);
+
+    Panel *parentPanel = new Panel("parentPanel", PANEL_WIDTH, PANEL_HEIGHT, 0, 0);
+    parentPanel->addComponent(animComponent4);
+
+    animationPanel->addComponent(parentPanel);
+
 
     return animationPanel;
 }
@@ -226,13 +248,14 @@ int runAnimatedPanels(int argc, char **argv) {
     RootPanel animatedPanelRoot = RootPanel("animationPanel", panelWidth, panelHeight, canvasHandler,
                                             buildAnimationPanel(font, panelWidth, panelHeight, lineHeight, lineWidth));
 
-    int nbSeconds = 3;
-    int fps = 100;
+    int nbSeconds = 60;
+    int fps = 30;
     int refreshNb = nbSeconds * fps;
     int usleepTime = 1000000 / fps;
     cout << "Drawing animation ..." << endl;
-    for (int i = 0; i < refreshNb; i++) {
-        tmillis_t start_wait_ms =  GetTimeInMillis();
+    while (!interrupt_received) {
+//  for (int i = 0; i < refreshNb; i++) {
+        tmillis_t start_wait_ms = GetTimeInMillis();
         animatedPanelRoot.render();
         tmillis_t time_already_spent = GetTimeInMillis() - start_wait_ms;
         usleep(usleepTime - time_already_spent / 1000);

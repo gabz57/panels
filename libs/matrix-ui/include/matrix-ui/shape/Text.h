@@ -25,10 +25,6 @@ public:
 
     virtual int getHeight() const;
 
-    virtual void draw(CanvasHolder &canvasHandler) {
-        draw(*canvasHandler.getCanvas());
-    }
-
     virtual void draw(Canvas &canvas);
 
 private:

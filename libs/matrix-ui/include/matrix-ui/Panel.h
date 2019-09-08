@@ -22,10 +22,6 @@ public:
 
     void addComponent(Component *component);
 
-    virtual void draw(CanvasHolder &canvasHandler) {
-        draw(*canvasHandler.getCanvas());
-    }
-
     virtual void draw(Canvas &canvas);
 
 protected:

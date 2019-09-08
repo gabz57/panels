@@ -1,4 +1,4 @@
-#include <matrix-ui/Text.h>
+#include <matrix-ui/shape/Text.h>
 #include <iostream>
 #include "utf8-internal.h"
 

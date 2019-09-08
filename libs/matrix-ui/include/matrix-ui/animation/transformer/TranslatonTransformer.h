@@ -2,10 +2,11 @@
 #define PANELS_TRANSLATIONTRANSFORMER_H
 
 #include <matrix-ui/animation/transformer/PixelTransformer.h>
-
+#include <iostream>
 #include <math.h>
 
 using namespace rgb_matrix;
+using namespace std;
 
 class TranslationTransformer : public PixelTransformer {
 public:
@@ -33,6 +34,7 @@ public:
             progress++;
         }
 //        progress %= max;
+        cout << "Progression : " << 100*(float) progress / (float) max << "%"<< endl;
     }
 
     virtual void MapPixel(int x, int y, int *matrix_x, int *matrix_y) {

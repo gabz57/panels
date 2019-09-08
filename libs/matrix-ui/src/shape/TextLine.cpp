@@ -1,5 +1,5 @@
-#include "matrix-ui/TextLine.h"
-#include "matrix-ui/Text.h"
+#include "matrix-ui/shape/TextLine.h"
+#include "matrix-ui/shape/Text.h"
 
 TextLine::TextLine(std::string id, std::string leftTxt, std::string rightTxt, const rgb_matrix::Font *font,
                    int width, int height, int x_offset, int y_offset, Layout &layout,
