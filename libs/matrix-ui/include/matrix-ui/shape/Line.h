@@ -11,8 +11,11 @@ using rgb_matrix::Canvas;
 
 class Line : public Component {
 public:
-    Line(std::string id, int x_start, int y_start, int x_end, int y_end);
-    Line(std::string id, int x_start, int y_start, int x_end, int y_end, int x_offset, int y_offset);
+    static const Color DEFAULT_LINE_COLOR;
+    static const Layout DEFAULT_LINE_LAYOUT;
+
+    Line(string id, int x_start, int y_start, int x_end, int y_end);
+    Line(string id, int x_start, int y_start, int x_end, int y_end, int x_offset, int y_offset);
 
     virtual ~Line();
 

@@ -1,12 +1,12 @@
-#ifndef PANELS_ROTATIONTRANSFORMER_H
-#define PANELS_ROTATIONTRANSFORMER_H
+#ifndef PANELS_FOCUSEDSTRETCHINGTRANSFORMER_H
+#define PANELS_FOCUSEDSTRETCHINGTRANSFORMER_H
 
 #include <matrix-ui/animation/transformer/PixelTransformer.h>
 #include <math.h>
 
-class RotationTransformer : public PixelTransformer {
+class FocusedStretchingTransformer : public PixelTransformer {
 public:
-    RotationTransformer(int angleDec, int cent_x, int cent_y) :
+    FocusedStretchingTransformer(int angleDec, int cent_x, int cent_y) :
             angle_(angleDec),
             cent_x(cent_x),
             cent_y(cent_y),
@@ -52,4 +52,4 @@ private:
     int progress;
 };
 
-#endif //PANELS_ROTATIONTRANSFORMER_H
+#endif //PANELS_FOCUSEDSTRETCHINGTRANSFORMER_H

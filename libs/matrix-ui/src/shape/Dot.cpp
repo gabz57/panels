@@ -1,17 +1,16 @@
 #include <matrix-ui/shape/Dot.h>
 #include <iostream>
 
-using namespace std;
+const Color Dot::DEFAULT_DOT_COLOR = Color(255, 0, 0);
+const Layout Dot::DEFAULT_DOT_LAYOUT = Layout(Layout::FLOAT_LEFT, DEFAULT_DOT_COLOR);
 
-const Layout DEFAULT_DOT_LAYOUT = Layout(Layout::FLOAT_LEFT);
-
-Dot::Dot(std::string id, int x, int y) :
+Dot::Dot(string id, int x, int y) :
         Component(id, 0, 0, DEFAULT_DOT_LAYOUT),
         x(x),
         y(y) {
 }
 
-Dot::Dot(std::string id, int x, int y, int x_offset, int y_offset) :
+Dot::Dot(string id, int x, int y, int x_offset, int y_offset) :
         Component(id, x_offset, y_offset, DEFAULT_DOT_LAYOUT),
         x(x),
         y(y) {
@@ -29,6 +28,6 @@ int Dot::getHeight() const {
 }
 
 void Dot::draw(Canvas &canvas) {
-    Color color(255, 0, 0);
+    const Color& color = getLayout().getColor();
     canvas.SetPixel(this->xOffset() + x, this->yOffset() + y, color.r, color.g, color.b);
 }

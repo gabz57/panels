@@ -2,7 +2,7 @@
 
 using namespace rgb_matrix;
 
-Component::Component(std::string id, int x_offset, int y_offset, const Layout &layout) :
+Component::Component(string id, int x_offset, int y_offset, const Layout &layout) :
         id(id),
         x_offset(x_offset),
         y_offset(y_offset),
@@ -24,7 +24,7 @@ const Component* Component::getParent() const {
     return this->parent;
 }
 
-std::string Component::getId() const {
+string Component::getId() const {
     return this->id;
 }
 

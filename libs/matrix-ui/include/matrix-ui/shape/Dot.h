@@ -8,11 +8,15 @@
 #include <matrix-ui/CanvasHolder.h>
 
 using rgb_matrix::Canvas;
+using namespace std;
 
 class Dot : public Component {
 public:
-    Dot(std::string id, int x, int y);
-    Dot(std::string id, int x, int y, int x_offset, int y_offset);
+    static const Color DEFAULT_DOT_COLOR;
+    static const Layout DEFAULT_DOT_LAYOUT;
+
+    Dot(string id, int x, int y);
+    Dot(string id, int x, int y, int x_offset, int y_offset);
 
     virtual ~Dot();
 

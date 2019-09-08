@@ -8,12 +8,16 @@
 #include <matrix-ui/Panel.h>
 #include <matrix-ui/Layout.h>
 
+
 class TextLine : public Panel {
 public:
-    TextLine(std::string id, std::string leftText, std::string rightText, const rgb_matrix::Font *font,
+    static const Color DEFAULT_TEXTLINE_COLOR;
+    static const Layout DEFAULT_TEXTLINE_LAYOUT;
+
+    TextLine(string id, string leftText, string rightText, const rgb_matrix::Font *font,
              int width, int height,
              int x_offset = 0, int y_offset = 0,
-             Layout &layout = DEFAULT_LAYOUT,
+             const Layout &layout = DEFAULT_TEXTLINE_LAYOUT,
              int xLeftOffset = 0, int yLeftOffset = 0,
              int xRightOffset = 0, int yRightOffset = 0);
 

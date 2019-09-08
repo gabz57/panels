@@ -34,7 +34,11 @@ public:
             progress++;
         }
 //        progress %= max;
-        cout << "Progression : " << 100*(float) progress / (float) max << "%"<< endl;
+//        cout << "Progression : " << 100*(float) progress / (float) max << "%"<< endl;
+    }
+
+    void Reset() {
+        progress = 0;
     }
 
     virtual void MapPixel(int x, int y, int *matrix_x, int *matrix_y) {

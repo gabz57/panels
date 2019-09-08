@@ -5,10 +5,12 @@
 #include <matrix-ui/RootPanel.h>
 #include <matrix-ui/shape/Text.h>
 #include <matrix-ui/shape/Dot.h>
+#include <matrix-ui/shape/Rectangle.h>
 #include <matrix-ui/TemperatureLine.h>
 #include <matrix-ui/shape/TextLine.h>
 #include <matrix-ui/CanvasHolder.h>
-#include <matrix-ui/animation/transformer/TranslatonTransformer.h>
+#include <matrix-ui/animation/transformer/TranslationTransformer.h>
+#include <matrix-ui/animation/transformer/VerticalStretchingTransformer.h>
 #include <matrix-ui/animation/transformer/RotationTransformer.h>
 #include <matrix-ui/animation/AnimationComponent.h>
 
@@ -31,6 +33,16 @@ static void InterruptHandler(int signo) {
 Panel *buildAnimationPanel(const Font *font, int PANEL_WIDTH, int PANEL_HEIGHT, int LINE_HEIGHT, int LINE_WIDTH) {
     Panel *animationPanel = new Panel("animationPanel", PANEL_WIDTH, PANEL_HEIGHT, 0, 0);
 
+    Rectangle *rectangle = new Rectangle("rectangle", 64, 64, 20, 20, -10, -10);
+    RotationTransformer *rotationTransformer4 = new RotationTransformer(360, 64, 64);
+    AnimationComponent *animComponent5 = new AnimationComponent(rectangle, rotationTransformer4, 360, 2500, true);
+    animationPanel->addComponent(animComponent5);
+
+    Rectangle *rectangle2 = new Rectangle("rectangle2", 32, 96, 20, 20, -10, -10);
+    VerticalStretchingTransformer *verticalStretchingTransformer = new VerticalStretchingTransformer(0.5, 86, 128);
+    AnimationComponent *animComponent6 = new AnimationComponent(rectangle2, verticalStretchingTransformer, 128, 2500, true);
+    animationPanel->addComponent(animComponent6);
+
     TextLine *textLine = new TextLine("cityLine", "How are you ?", "Fine ?", font, LINE_WIDTH, LINE_HEIGHT, 0, 0);
     TranslationTransformer *translationTransformer = new TranslationTransformer(20, 20);
     AnimationComponent *animComponent = new AnimationComponent(textLine, translationTransformer, 20, 5000);
@@ -45,7 +57,7 @@ Panel *buildAnimationPanel(const Font *font, int PANEL_WIDTH, int PANEL_HEIGHT, 
 //    std::list<PixelTransformer *> transformers =  std::list<PixelTransformer *>();
 //    transformers.push_back(rotationTransformer);
 //    transformers.push_back(translationTransformer3);
-    Text *text = new Text("wordLine", "Oh yeah !", font, DEFAULT_TEXT_LAYOUT, 16, 16);
+    Text *text = new Text("wordLine", "Oh yeah !", font, Text::DEFAULT_TEXT_LAYOUT, 16, 16);
     RotationTransformer *rotationTransformer = new RotationTransformer(360, 16, 16);
     AnimationComponent *subAnimComponent = new AnimationComponent(text, rotationTransformer, 360, 4000);
 
@@ -264,8 +276,6 @@ int runAnimatedPanels(int argc, char **argv) {
     //    animatedPanelRoot.draw(canvasHandler);
     //    //canvasHandler.renderAndSwap(); // for static use
 
-    cout << "Drawing animation inited... main thread entering sleep" << endl;
-    sleep(360);
     cout << "Drawing animation DONE" << endl;
 
     // Animation finished. Shut down the RGB matrix.

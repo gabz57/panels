@@ -12,27 +12,27 @@ static Layout DEFAULT_ANIMATION_LAYOUT = Layout(Layout::FLOAT_LEFT);
 
 class AnimationComponent : public Component {
 public:
-    AnimationComponent(Component *component, PixelTransformer *transformer, int nbSteps, tmillis_t duration_ms, int x_offset = 0, int y_offset = 0) :
+    AnimationComponent(Component *component, PixelTransformer *transformer, int nbSteps, tmillis_t duration_ms, bool infiniteLoop = false, int x_offset = 0, int y_offset = 0) :
             Component(component->getId() + "-anim",  x_offset, y_offset, DEFAULT_ANIMATION_LAYOUT),
             delegate(component),
             duration_ms(duration_ms),
             nbSteps(nbSteps) {
         this->transformers.push_back(transformer);
         this->animationThread = new AnimationThread(&this->animation_mutex_, &this->transformers, this->nbSteps,
-                                                    &this->duration_ms);
+                                                    &this->duration_ms, infiniteLoop);
         this->started = false;
         component->setParent(this);
     }
 
     AnimationComponent(Component *component, std::list<PixelTransformer *> *transformers, int nbSteps,
-                       tmillis_t duration_ms, int x_offset = 0, int y_offset = 0) :
+                       tmillis_t duration_ms, bool infiniteLoop = false, int x_offset = 0, int y_offset = 0) :
             Component(component->getId() + "-anim", x_offset, y_offset, DEFAULT_ANIMATION_LAYOUT),
             delegate(component),
             duration_ms(duration_ms),
             nbSteps(nbSteps) {
         this->transformers.assign(transformers->begin(), transformers->end());
         animationThread = new AnimationThread(&this->animation_mutex_, &this->transformers, this->nbSteps,
-                                              &this->duration_ms);
+                                              &this->duration_ms, infiniteLoop);
         started = false;
         component->setParent(this);
     }

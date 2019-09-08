@@ -8,11 +8,11 @@
 #include <matrix-ui/CanvasHolder.h>
 #include <matrix-ui/Layout.h>
 
-static Layout DEFAULT_LAYOUT = Layout(Layout::FLOAT_LEFT);
+static const Layout DEFAULT_LAYOUT = Layout(Layout::FLOAT_LEFT);
 
 class Panel : public Component {
 public:
-    Panel(std::string id, int width, int height, int x_offset, int y_offset, Layout &layout = DEFAULT_LAYOUT);
+    Panel(string id, int width, int height, int x_offset, int y_offset, const Layout &layout = DEFAULT_LAYOUT);
 
     virtual ~Panel();
 

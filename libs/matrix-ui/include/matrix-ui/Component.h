@@ -5,11 +5,12 @@
 #include <matrix-ui/CanvasHolder.h>
 #include <string>
 
+using namespace std;
 using namespace rgb_matrix;
 
 class Component {
 public:
-    Component(std::string id, int x_offset, int y_offset, const Layout &layout);
+    Component(string id, int x_offset, int y_offset, const Layout &layout);
 
     virtual ~Component();
 
@@ -29,7 +30,7 @@ public:
 
     void setParent(const Component *parent);
 
-    std::string getId() const;
+    string getId() const;
 
     int xOffset() const;
 
@@ -39,7 +40,7 @@ public:
 
 
 private:
-    std::string id;
+    string id;
     int x_offset;
     int y_offset;
     const Layout &layout;

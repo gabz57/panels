@@ -5,7 +5,7 @@ using namespace std;
 
 Layout DEFAULT_LAYOUT = Layout(Layout::FLOAT_LEFT);
 
-RootPanel::RootPanel(std::string id, int width, int height, CanvasHolder &canvasHandler, Component *childComponent) :
+RootPanel::RootPanel(string id, int width, int height, CanvasHolder &canvasHandler, Component *childComponent) :
         Component(id, 0, 0, DEFAULT_LAYOUT),
         width(width),
         height(height),
@@ -19,7 +19,7 @@ RootPanel::~RootPanel() {
 }
 
 void RootPanel::render() {
-    cout << "RootPanel::render" << endl;
+//    cout << "RootPanel::render" << endl;
     _canvasHandler.clear();
     this->draw(_canvasHandler);
     _canvasHandler.renderAndSwap();
@@ -30,9 +30,9 @@ void RootPanel::draw(Canvas &canvas) {
 }
 
 void RootPanel::draw(CanvasHolder &canvasHandler) {
-//    std::cout << std::endl << "Drawing RootPanel :: " << this->getId()
+//    cout << endl << "Drawing RootPanel :: " << this->getId()
 //              << " - w:" << this->width << ", h:" << this->height
-//              << std::endl;
+//              << endl;
     this->childComponent->draw(canvasHandler);
 }
 

@@ -2,26 +2,33 @@
 #define LAYOUT_H
 
 #include <string>
+#include <graphics.h>
+
+using namespace rgb_matrix;
+using namespace std;
+
+const Color DEFAULT_COLOR = Color(0, 255, 255);
 
 class Layout {
 
-
 public:
-    static const std::string FLOAT_LEFT;
-    static const std::string FLOAT_RIGHT;
-    static const Layout FLOAT_LEFT_LAYOUT ;
+    static const string FLOAT_LEFT;
+    static const string FLOAT_RIGHT;
+    static const Layout FLOAT_LEFT_LAYOUT;
     static const Layout FLOAT_RIGHT_LAYOUT;
 
-    Layout(std::string floating);
+    Layout(string floating, const Color &color = DEFAULT_COLOR);
 
     virtual ~Layout();
 
-    std::string getFloating() const;
+    string getFloating() const;
+
+    const Color &getColor() const;
 
 private:
-    std::string floating;
+    string floating;
+    const Color &color;
 };
-
 
 
 #endif /* LAYOUT_H */
