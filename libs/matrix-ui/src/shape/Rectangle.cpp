@@ -3,8 +3,8 @@
 const Color Rectangle::DEFAULT_RECTANGLE_COLOR = Color(255, 0, 0);
 const Layout Rectangle::DEFAULT_RECTANGLE_LAYOUT = Layout(Layout::FLOAT_LEFT, DEFAULT_RECTANGLE_COLOR);
 
-Rectangle::Rectangle(string id, int x, int y, int width, int height, int x_offset, int y_offset) :
-        Component(id, x_offset, y_offset, DEFAULT_RECTANGLE_LAYOUT),
+Rectangle::Rectangle(string id, int x, int y, int width, int height, int x_offset, int y_offset, const Layout &layout) :
+        Component(id, x_offset, y_offset, layout),
         x(x), y(y), width(width), height(height) {
 }
 

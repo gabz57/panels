@@ -6,6 +6,7 @@
 #include <matrix-ui/shape/Text.h>
 #include <matrix-ui/shape/Dot.h>
 #include <matrix-ui/shape/Rectangle.h>
+#include <matrix-ui/shape/Circle.h>
 #include <matrix-ui/TemperatureLine.h>
 #include <matrix-ui/shape/TextLine.h>
 #include <matrix-ui/CanvasHolder.h>
@@ -42,6 +43,11 @@ Panel *buildAnimationPanel(const Font *font, int PANEL_WIDTH, int PANEL_HEIGHT, 
     VerticalStretchingTransformer *verticalStretchingTransformer = new VerticalStretchingTransformer(0.5, 86, 128);
     AnimationComponent *animComponent6 = new AnimationComponent(rectangle2, verticalStretchingTransformer, 128, 2500, true);
     animationPanel->addComponent(animComponent6);
+
+    Circle *circle = new Circle("circle", 96, 96, 20);
+    VerticalStretchingTransformer *verticalStretchingTransformer2 = new VerticalStretchingTransformer(0.5, 86, 128);
+    AnimationComponent *animComponent7 = new AnimationComponent(circle, verticalStretchingTransformer2, 128, 2500, true);
+    animationPanel->addComponent(animComponent7);
 
     TextLine *textLine = new TextLine("cityLine", "How are you ?", "Fine ?", font, LINE_WIDTH, LINE_HEIGHT, 0, 0);
     TranslationTransformer *translationTransformer = new TranslationTransformer(20, 20);

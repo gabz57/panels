@@ -14,7 +14,7 @@ public:
     static const Color DEFAULT_RECTANGLE_COLOR;
     static const Layout DEFAULT_RECTANGLE_LAYOUT;
 
-    Rectangle(string id, int x, int y, int width, int height, int x_offset = 0, int y_offset = 0);
+    Rectangle(string id, int x, int y, int width, int height, int x_offset = 0, int y_offset = 0, const Layout &layout = DEFAULT_RECTANGLE_LAYOUT);
 
     virtual ~Rectangle();
 
