@@ -9,24 +9,27 @@ using namespace std;
 
 const Color DEFAULT_COLOR = Color(0, 255, 255);
 
+enum class Floating {
+    FLOAT_LEFT,
+    FLOAT_RIGHT
+};
+
 class Layout {
 
 public:
-    static const string FLOAT_LEFT;
-    static const string FLOAT_RIGHT;
-    static const Layout FLOAT_LEFT_LAYOUT;
-    static const Layout FLOAT_RIGHT_LAYOUT;
+    static const Layout FLOAT_LEFT;
+    static const Layout FLOAT_RIGHT;
 
-    Layout(string floating, const Color &color = DEFAULT_COLOR);
+    Layout(const Floating &floating, const Color &color = DEFAULT_COLOR);
 
     virtual ~Layout();
 
-    string getFloating() const;
+    const Floating &getFloating() const;
 
     const Color &getColor() const;
 
 private:
-    string floating;
+    Floating floating;
     const Color &color;
 };
 

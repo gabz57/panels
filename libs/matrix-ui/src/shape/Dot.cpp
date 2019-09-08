@@ -2,7 +2,7 @@
 #include <iostream>
 
 const Color Dot::DEFAULT_DOT_COLOR = Color(255, 0, 0);
-const Layout Dot::DEFAULT_DOT_LAYOUT = Layout(Layout::FLOAT_LEFT, DEFAULT_DOT_COLOR);
+const Layout Dot::DEFAULT_DOT_LAYOUT = Layout(Floating::FLOAT_LEFT, DEFAULT_DOT_COLOR);
 
 Dot::Dot(string id, int x, int y, int x_offset, int y_offset, const Layout &layout) :
         Component(id, x_offset, y_offset, layout),

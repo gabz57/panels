@@ -8,7 +8,7 @@
 #include <matrix-ui/CanvasHolder.h>
 #include <matrix-ui/Layout.h>
 
-static const Layout DEFAULT_LAYOUT = Layout(Layout::FLOAT_LEFT);
+static const Layout DEFAULT_LAYOUT = Layout(Floating::FLOAT_LEFT);
 
 class Panel : public Component {
 public:

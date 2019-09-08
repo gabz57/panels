@@ -8,7 +8,7 @@
 #include "matrix-ui/animation/AnimationThread.h"
 #include "matrix-ui/animation/CanvasAdapter.h"
 
-static Layout DEFAULT_ANIMATION_LAYOUT = Layout(Layout::FLOAT_LEFT);
+static Layout DEFAULT_ANIMATION_LAYOUT = Layout(Floating::FLOAT_LEFT);
 
 class AnimationComponent : public Component {
 public:

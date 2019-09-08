@@ -3,7 +3,7 @@
 #include "utf8-internal.h"
 
 const Color Text::DEFAULT_TEXT_COLOR = Color(0, 0, 255);
-const Layout Text::DEFAULT_TEXT_LAYOUT = Layout(Layout::FLOAT_LEFT, DEFAULT_TEXT_COLOR);
+const Layout Text::DEFAULT_TEXT_LAYOUT = Layout(Floating::FLOAT_LEFT, DEFAULT_TEXT_COLOR);
 
 Text::Text(string id, string text, const rgb_matrix::Font *font, const Layout &layout, int x_offset, int y_offset) :
         Component(id, x_offset, y_offset, layout),
@@ -34,7 +34,7 @@ int Text::getHeight() const {
 void Text::draw(Canvas &canvas) {
     //   std::cout << "Drawing Text :: " << this->getId() << " - " << this->text << std::endl;
 
-    const Color& color = getLayout().getColor();
+    const Color &color = getLayout().getColor();
     Color bg_color(0, 0, 0);
 
     int letter_spacing = 0;
@@ -43,7 +43,7 @@ void Text::draw(Canvas &canvas) {
     int y = this->yOffset();
 
     // Apply layout
-    x += this->getLayout().getFloating() == Layout::FLOAT_LEFT
+    x += this->getLayout().getFloating() == Floating::FLOAT_LEFT
          ? 0
          : this->getParent()->getWidth() - getWidth();
 
