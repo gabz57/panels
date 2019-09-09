@@ -38,13 +38,15 @@ public:
 
     const Layout &getLayout() const;
 
+    Canvas * getPreCanvas(Canvas &canvas);
 
 private:
     string id;
+    const Component *parent = nullptr;
+protected:
     int x_offset;
     int y_offset;
-    const Layout &layout;
-    const Component *parent = nullptr;
+    const Layout layout;
 };
 
 #endif /* COMPONENT_H */

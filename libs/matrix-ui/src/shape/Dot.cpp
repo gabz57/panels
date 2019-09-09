@@ -10,6 +10,12 @@ Dot::Dot(string id, int x, int y, int x_offset, int y_offset, const Layout &layo
         y(y) {
 }
 
+Dot::Dot(Dot *source, string id, const Layout &layout) :
+        Component(id, source->x_offset, source->y_offset, layout),
+        x(source->x),
+        y(source->y) {
+}
+
 Dot::~Dot() {
 }
 
@@ -22,6 +28,9 @@ int Dot::getHeight() const {
 }
 
 void Dot::draw(Canvas &canvas) {
-    const Color& color = getLayout().getColor();
-    canvas.SetPixel(this->xOffset() + x, this->yOffset() + y, color.r, color.g, color.b);
+    Canvas *preCanvas = getPreCanvas(canvas);
+
+    const Color &color = getLayout().getColor();
+    preCanvas->SetPixel(this->xOffset() + x, this->yOffset() + y, color.r, color.g, color.b);
+    delete preCanvas;
 }

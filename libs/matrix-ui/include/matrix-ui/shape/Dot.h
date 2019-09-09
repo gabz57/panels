@@ -17,6 +17,8 @@ public:
 
     Dot(string id, int x, int y, int x_offset = 0, int y_offset = 0, const Layout &layout = DEFAULT_DOT_LAYOUT);
 
+    Dot(Dot *source, string id, const Layout &layout);
+
     virtual ~Dot();
 
     virtual int getWidth() const;

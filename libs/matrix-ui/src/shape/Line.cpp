@@ -25,6 +25,9 @@ int Line::getHeight() const {
 }
 
 void Line::draw(Canvas &canvas) {
+
+
+
     const Color &color = getLayout().getColor();
     int x = this->xOffset();
     int y = this->yOffset();

@@ -2,7 +2,9 @@
 #define LAYOUT_H
 
 #include <string>
+#include <list>
 #include <graphics.h>
+#include <matrix-ui/animation/transformer/PixelTransformer.h>
 
 using namespace rgb_matrix;
 using namespace std;
@@ -22,14 +24,21 @@ public:
 
     Layout(const Floating &floating, const Color &color = DEFAULT_COLOR);
 
+    Layout(const Layout &layout, const std::list<PixelTransformer *> &tr);
+
     virtual ~Layout();
 
     const Floating &getFloating() const;
 
     const Color &getColor() const;
 
+    const list<PixelTransformer *> &getTransformers() const;
+
 private:
-    Floating floating;
+//    void setTransformers(const list<PixelTransformer *> &transformers);
+
+    list<PixelTransformer *> transformers;
+    const Floating floating;
     const Color &color;
 };
 

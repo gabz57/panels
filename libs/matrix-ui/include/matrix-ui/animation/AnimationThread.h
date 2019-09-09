@@ -39,7 +39,6 @@ public:
     void Stop() {
         MutexLock l(animation_mutex_);
         running_ = false;
-        cout << "Animation Thread STOPPED" << endl;
     }
 
     bool running() {
@@ -48,49 +47,53 @@ public:
     }
 
     virtual void Run() {
-        const tmillis_t anim_delay_ms = *duration_ms / nbSteps;
-        cout << "Animation Thread STARTED" << endl;
-        tmillis_t start_ms = GetTimeInMillis();
+        int animation_count = 0;
+        const tus_t loop_duration_us = *duration_ms * 1000;
+        const tus_t frame_duration_us = loop_duration_us / nbSteps;
 
-        bool once = false;
-        while (infiniteLoop || !once) {
+        MutexLock *m;
+        tus_t all_start_time = GetTimeInMicros();
+        tus_t for_loop_start_time;
+        tus_t for_loop_sleep_correction = 0;
+        tus_t while_loop_sleep_correction = 0;
+        tus_t while_loop_start_time;
+        while (!interrupt_received && running() && (infiniteLoop || animation_count <= 0)) {
+            while_loop_start_time = GetTimeInMicros();
             for (PixelTransformer *transformer : *transformers) {
                 transformer->Reset();
             }
-            if (interrupt_received) break;
-            for (int i = 0; i < nbSteps; ++i) {
-                if (interrupt_received) break;
-
-                MutexLock *m = new MutexLock(animation_mutex_);
-
+            for (int i = 0; i < nbSteps; i++) {
+                for_loop_start_time = GetTimeInMicros();
+                if (!running() || interrupt_received) break;
+                m = new MutexLock(animation_mutex_);
                 for (PixelTransformer *transformer : *transformers) {
-                    //                cout << "Stepping" << endl;
                     transformer->Step();
                 }
-                delete m;// release animation Lock to allow drawing methods
-                SleepMillis(anim_delay_ms);
-
+                delete m;
+                SleepUs(frame_duration_us - (GetTimeInMicros() - for_loop_start_time) - for_loop_sleep_correction);
+                for_loop_sleep_correction = computeCorrectionSince(all_start_time,
+                                                                   animation_count * (loop_duration_us) +
+                                                                   frame_duration_us * (i + 1));
             }
-            once = true;
+            animation_count++;
+            if (interrupt_received) break;
+            SleepUs(loop_duration_us - (GetTimeInMicros() - while_loop_start_time) - while_loop_sleep_correction);
+            while_loop_sleep_correction = computeCorrectionSince(all_start_time, animation_count * (loop_duration_us));
+            if (animation_count == INT_MAX) {
+                animation_count = 0;
+                all_start_time = GetTimeInMicros();
+            }
         }
-//        while (running() && !interrupt_received && (GetTimeInMillis() - start_ms)<= *duration_ms) {
-////            tmillis_t start_wait_ms = GetTimeInMillis();
-//            MutexLock *m = new MutexLock(animation_mutex_);
-//
-//            for (PixelTransformer *transformer : *transformers) {
-////                cout << "Stepping" << endl;
-//                transformer->Step();
-//            }
-//            delete m;// release animation Lock to allow drawing methods
-////            tmillis_t time_already_spent = GetTimeInMillis() - start_wait_ms;
-//
-////            SleepMillis(anim_delay_ms - time_already_spent);
-//            SleepMillis(anim_delay_ms);
-//        }
         Stop();
-    };
+    }
 
 private:
+    inline tus_t computeCorrectionSince(tus_t start_time, tus_t computed_elapsed) const {
+        tus_t elapsed = GetTimeInMicros() - start_time;
+        tus_t sleep_correction = elapsed - computed_elapsed;
+        return sleep_correction;
+    };
+
     Mutex *animation_mutex_;
     std::list<PixelTransformer *> *transformers;
     tmillis_t *duration_ms;

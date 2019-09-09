@@ -1,4 +1,5 @@
 #include <matrix-ui/Component.h>
+#include "matrix-ui/animation/CanvasAdapter.h"
 
 using namespace rgb_matrix;
 
@@ -20,7 +21,7 @@ void Component::setParent(const Component *parentComponent) {
     this->parent = parentComponent;
 }
 
-const Component* Component::getParent() const {
+const Component *Component::getParent() const {
     return this->parent;
 }
 
@@ -45,3 +46,8 @@ int Component::yOffset() const {
 const Layout &Component::getLayout() const {
     return this->layout;
 }
+
+Canvas *Component::getPreCanvas(Canvas &canvas) {
+    return new CanvasAdapter(&canvas, layout.getTransformers());
+}
+

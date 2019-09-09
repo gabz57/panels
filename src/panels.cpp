@@ -33,7 +33,7 @@ RGBMatrix *createMatrix(int argc, char **argv) {
     defaults.chain_length = 4;
     defaults.pixel_mapper_config = "U-mapper;Rotate:180";
     defaults.parallel = 1;
-//    defaults.show_refresh_rate = true;
+    defaults.show_refresh_rate = true;
     return rgb_matrix::CreateMatrixFromFlags(&argc, &argv, &defaults);
 }
 
@@ -121,28 +121,22 @@ int runAnimatedPanels(int argc, char **argv) {
 
     CanvasHolder canvasHandler(matrix);
 
-//    RootPanel animationRootPanel = RootPanel("demoAnimationRootPanel", panelWidth, panelHeight, canvasHandler,
-//                                             buildDemoAnimationPanel(font, panelWidth, panelHeight, lineHeight,
-//                                                                     lineWidth));
+    RootPanel animationRootPanel = RootPanel("demoAnimationRootPanel", panelWidth, panelHeight, canvasHandler,
+                                             buildDemoAnimationPanel(font, panelWidth, panelHeight, lineHeight,
+                                                                     lineWidth));
+//
+//    RootPanel animationRootPanel = RootPanel("clockAnimationRootPanel", panelWidth, panelHeight, canvasHandler,
+//                                            buildClockAnimationPanel(panelWidth, panelHeight));
 
-    RootPanel animationRootPanel = RootPanel("clockAnimationRootPanel", panelWidth, panelHeight, canvasHandler,
-                                            buildClockAnimationPanel(panelWidth, panelHeight));
-
-    int nbSeconds = 60;
     int fps = 30;
-    int refreshNb = nbSeconds * fps;
     int usleepTime = 1000000 / fps;
     cout << "Drawing animation ..." << endl;
     while (!interrupt_received) {
-//  for (int i = 0; i < refreshNb; i++) {
         tmillis_t start_wait_ms = GetTimeInMillis();
         animationRootPanel.render();
         tmillis_t time_already_spent = GetTimeInMillis() - start_wait_ms;
         usleep(usleepTime - time_already_spent / 1000);
     }
-    //    canvasHandler.clear();
-    //    animatedPanelRoot.draw(canvasHandler);
-    //    //canvasHandler.renderAndSwap(); // for static use
 
     cout << "Drawing animation DONE" << endl;
 

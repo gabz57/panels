@@ -10,14 +10,12 @@ public:
             angle_(angleDec),
             cent_x(cent_x),
             cent_y(cent_y),
-            progress(0) {}
+            progress(angleDec) {}
 
     void Step() {
         if (progress <= angle_) {
             progress++;
         }
-//        progress %= angle_;
-//        cout << "Angle : " << (float) progress << "°" << endl;
     }
 
     void Reset() {
@@ -33,10 +31,6 @@ private:
 
     inline float DegToRad(float x) {
         return x / 180 * Pi;
-    }
-
-    inline float RadToDeg(float x) {
-        return x / Pi * 180;
     }
 
     void Rotate(int x, int y, float angle_rad, int *new_x, int *new_y) {
