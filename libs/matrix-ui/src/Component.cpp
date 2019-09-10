@@ -3,7 +3,7 @@
 
 using namespace rgb_matrix;
 
-Component::Component(const string& id, int x_offset, int y_offset, const Layout &layout) :
+Component::Component(const string &id, int x_offset, int y_offset, const Layout &layout) :
         id(id),
         x_offset(x_offset),
         y_offset(y_offset),
@@ -43,11 +43,11 @@ int Component::yOffset() const {
     return this->y_offset;
 }
 
-Layout &Component::getLayout()  {
+Layout &Component::getLayout() {
     return this->layout;
 }
 
-Canvas *Component::getPreCanvas(Canvas &canvas) {
+Canvas *Component::canvasAdapter(Canvas &canvas) {
     return new CanvasAdapter(&canvas, layout.getTransformers());
 }
 

@@ -12,20 +12,23 @@ static Layout DEFAULT_ANIMATION_LAYOUT = Layout(Floating::FLOAT_LEFT);
 
 class AnimationComponent : public Component {
 public:
-    AnimationComponent(Component *component, PixelTransformer *transformer, int nbSteps, tmillis_t duration_ms, bool infiniteLoop = false, tus_t initialClockCompensation = 0, int x_offset = 0, int y_offset = 0) :
-            Component(component->getId() + "-anim",  x_offset, y_offset, DEFAULT_ANIMATION_LAYOUT),
+    AnimationComponent(Component *component, PixelTransformer *transformer, int nbSteps, tmillis_t duration_ms,
+                       bool infiniteLoop = false, tus_t initialClockCompensation = 0, int x_offset = 0,
+                       int y_offset = 0) :
+            Component(component->getId() + "-anim", x_offset, y_offset, DEFAULT_ANIMATION_LAYOUT),
             delegate(component),
             duration_ms(duration_ms),
             nbSteps(nbSteps) {
         this->transformers.push_back(transformer);
         this->animationThread = new AnimationThread(&this->animation_mutex_, &this->transformers, this->nbSteps,
-                                                    &this->duration_ms, infiniteLoop, initialClockCompensation );
+                                                    &this->duration_ms, infiniteLoop, initialClockCompensation);
         this->started = false;
         component->setParent(this);
     }
 
     AnimationComponent(Component *component, std::list<PixelTransformer *> *transformers, int nbSteps,
-                       tmillis_t duration_ms, bool infiniteLoop = false, tus_t initialClockCompensation = 0, int x_offset = 0, int y_offset = 0) :
+                       tmillis_t duration_ms, bool infiniteLoop = false, tus_t initialClockCompensation = 0,
+                       int x_offset = 0, int y_offset = 0) :
             Component(component->getId() + "-anim", x_offset, y_offset, DEFAULT_ANIMATION_LAYOUT),
             delegate(component),
             duration_ms(duration_ms),
@@ -52,7 +55,7 @@ public:
         }
         MutexLock lock(&animation_mutex_);
         CanvasAdapter canvasAdapter = CanvasAdapter(&canvas, transformers);
-        delegate->draw(canvasAdapter);
+        delegate->drawComponent(canvasAdapter);
     };
 
     virtual int getWidth() const {

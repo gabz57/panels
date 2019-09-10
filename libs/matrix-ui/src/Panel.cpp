@@ -1,7 +1,7 @@
 #include <matrix-ui/Panel.h>
 #include <iostream>
 
-Panel::Panel(const string& id, int width, int height, int x_offset, int y_offset, const Layout &layout)
+Panel::Panel(const string &id, int width, int height, int x_offset, int y_offset, const Layout &layout)
         : Component(id, x_offset, y_offset, layout), width(width), height(height) {
 }
 
@@ -34,13 +34,10 @@ void Panel::addComponent(Component *component) {
 }
 
 void Panel::draw(Canvas &canvas) {
-    Canvas *preCanvas = getPreCanvas(canvas);
-
     std::unordered_map<std::string, Component *> mp = this->components;
     auto it = mp.begin();
     while (it != this->components.end()) {
-        it->second->draw(*preCanvas);
+        it->second->drawComponent(canvas);
         it++;
     }
-    delete preCanvas;
 }

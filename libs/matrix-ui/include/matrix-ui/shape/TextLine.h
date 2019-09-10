@@ -14,7 +14,7 @@ public:
     static const Color DEFAULT_TEXTLINE_COLOR;
     static const Layout DEFAULT_TEXTLINE_LAYOUT;
 
-    TextLine(const string& id, const string& leftText, const string& rightText, const rgb_matrix::Font *font,
+    TextLine(const string &id, const string &leftText, const string &rightText, const rgb_matrix::Font *font,
              int width, int height,
              int x_offset = 0, int y_offset = 0,
              const Layout &layout = DEFAULT_TEXTLINE_LAYOUT,

@@ -10,12 +10,12 @@
 #include <matrix-ui/shape/Dot.h>
 #include <matrix-ui/shape/Rectangle.h>
 #include <matrix-ui/shape/Circle.h>
-#include <matrix-ui/TemperatureLine.h>
+#include <matrix-ui/samples/TemperatureLine.h>
 #include <matrix-ui/shape/TextLine.h>
 #include <matrix-ui/CanvasHolder.h>
-#include <matrix-ui/animation/transformer/TranslationTransformer.h>
-#include <matrix-ui/animation/transformer/VerticalStretchingTransformer.h>
-#include <matrix-ui/animation/transformer/RotationTransformer.h>
+#include <matrix-ui/animation/transformer/base/TranslationTransformer.h>
+#include <matrix-ui/animation/transformer/base/VerticalStretchingTransformer.h>
+#include <matrix-ui/animation/transformer/base/RotationTransformer.h>
 #include <matrix-ui/animation/AnimationComponent.h>
 
 #include <unistd.h>

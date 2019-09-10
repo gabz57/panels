@@ -16,8 +16,6 @@ public:
 
     virtual void draw(Canvas &canvas);
 
-    virtual void draw(CanvasHolder &canvasHandler);
-
     virtual int getWidth() const;
 
     virtual int getHeight() const;
@@ -26,7 +24,7 @@ public:
 private:
     int width;
     int height;
-    CanvasHolder &_canvasHandler;
+    CanvasHolder &canvasHandler;
     Component* childComponent;
 };
 

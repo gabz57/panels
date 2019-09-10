@@ -5,11 +5,11 @@ using namespace std;
 
 Layout DEFAULT_LAYOUT = Layout(Floating::FLOAT_LEFT);
 
-RootPanel::RootPanel(const string& id, int width, int height, CanvasHolder &canvasHandler, Component *childComponent) :
+RootPanel::RootPanel(const string &id, int width, int height, CanvasHolder &canvasHandler, Component *childComponent) :
         Component(id, 0, 0, DEFAULT_LAYOUT),
         width(width),
         height(height),
-        _canvasHandler(canvasHandler),
+        canvasHandler(canvasHandler),
         childComponent(childComponent) {
     childComponent->setParent(this);
 }
@@ -19,17 +19,13 @@ RootPanel::~RootPanel() {
 }
 
 void RootPanel::render() {
-    _canvasHandler.clear();
-    this->draw(_canvasHandler);
-    _canvasHandler.renderAndSwap();
+    canvasHandler.clear();
+    this->draw(*canvasHandler.getCanvas());
+    canvasHandler.renderAndSwap();
 }
 
 void RootPanel::draw(Canvas &canvas) {
-    draw(_canvasHandler);
-}
-
-void RootPanel::draw(CanvasHolder &canvasHandler) {
-    this->childComponent->draw(canvasHandler);
+    this->childComponent->drawComponent(*canvasAdapter(canvas));
 }
 
 int RootPanel::getWidth() const {

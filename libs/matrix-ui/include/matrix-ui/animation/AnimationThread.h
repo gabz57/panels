@@ -21,19 +21,19 @@ public:
     }
 
     virtual void Start(int realtime_priority = 0, uint32_t affinity_mask = 0) {
-        {
-            MutexLock l(animation_mutex_);
+        MutexLock l(animation_mutex_);
+        if (!running_) {
             running_ = true;
-        }
-        if (*duration_ms > 0) {
-            Thread::Start(realtime_priority, affinity_mask);
-        } else {
-            for (int i = 0; i < nbSteps; ++i) {
-                for (PixelTransformer *transformer : *transformers) {
-                    transformer->Step();
+            if (*duration_ms > 0) {
+                Thread::Start(realtime_priority, affinity_mask);
+            } else {
+                for (int i = 0; i < nbSteps; ++i) {
+                    for (PixelTransformer *transformer : *transformers) {
+                        transformer->Step();
+                    }
                 }
+                running_ = false;
             }
-            running_ = false;
         }
     }
 

@@ -3,6 +3,7 @@
 
 #include <matrix-ui/Layout.h>
 #include <matrix-ui/CanvasHolder.h>
+#include <matrix-ui/animation/CanvasAdapter.h>
 #include <string>
 
 using namespace std;
@@ -10,17 +11,11 @@ using namespace rgb_matrix;
 
 class Component {
 public:
-    Component(const string& id, int x_offset, int y_offset, const Layout &layout);
+    Component(const string &id, int x_offset, int y_offset, const Layout &layout);
 
     virtual ~Component();
 
     bool operator==(const Component &other);
-
-    virtual void draw(CanvasHolder &canvasHandler) {
-        draw(*canvasHandler.getCanvas());
-    }
-
-    virtual void draw(Canvas &canvas) = 0;
 
     virtual int getWidth() const = 0;
 
@@ -36,17 +31,26 @@ public:
 
     int yOffset() const;
 
-    Layout &getLayout() ;
+    Layout &getLayout();
 
-    Canvas * getPreCanvas(Canvas &canvas);
+    Canvas *canvasAdapter(Canvas &canvas);
 
-private:
-    string id;
-    const Component *parent = nullptr;
+    void drawComponent(Canvas &canvas) {
+        Canvas* adapter = new CanvasAdapter(&canvas, layout.getTransformers());
+        this->draw(*adapter);
+        delete adapter;
+    }
+
 protected:
+
     int x_offset;
     int y_offset;
     Layout layout;
+private:
+    virtual void draw(Canvas &canvas) = 0;
+
+    string id;
+    const Component *parent = nullptr;
 };
 
 #endif /* COMPONENT_H */

@@ -1,4 +1,4 @@
-#include "matrix-ui/TemperatureLine.h"
+#include "matrix-ui/samples/TemperatureLine.h"
 #include "matrix-ui/shape/Text.h"
 
 TemperatureLine::TemperatureLine(const string& id, const string& label, int temperature, const rgb_matrix::Font *font,

@@ -5,7 +5,8 @@
 const Color Text::DEFAULT_TEXT_COLOR = Color(0, 0, 255);
 const Layout Text::DEFAULT_TEXT_LAYOUT = Layout(Floating::FLOAT_LEFT, DEFAULT_TEXT_COLOR);
 
-Text::Text(const string& id, const string& text, const rgb_matrix::Font *font, const Layout &layout, int x_offset, int y_offset) :
+Text::Text(const string &id, const string &text, const rgb_matrix::Font *font, const Layout &layout, int x_offset,
+           int y_offset) :
         Component(id, x_offset, y_offset, layout),
         text(text),
         font(font) {
@@ -37,7 +38,6 @@ int Text::getHeight() const {
 
 void Text::draw(Canvas &canvas) {
     //   std::cout << "Drawing Text :: " << this->getId() << " - " << this->text << std::endl;
-    Canvas *preCanvas = getPreCanvas(canvas);
 
     const Color &color = getLayout().getColor();
     const Color *bg_color = nullptr;
@@ -57,6 +57,5 @@ void Text::draw(Canvas &canvas) {
 //              << " offset(" << this->xOffset() << "," << this->yOffset() << ") "
 //              << std::endl;
 
-    rgb_matrix::DrawText(preCanvas, *font, x, y + font->baseline(), color, bg_color, this->text.c_str(), letter_spacing);
-    delete preCanvas;
+    rgb_matrix::DrawText(&canvas, *font, x, y + font->baseline(), color, bg_color, this->text.c_str(), letter_spacing);
 }
