@@ -6,11 +6,11 @@
 
 class RotationTransformer : public PixelTransformer {
 public:
-    RotationTransformer(int angleDec, int cent_x, int cent_y) :
+    RotationTransformer(int angleDec, int cent_x, int cent_y, int progress = -1) :
             angle_(angleDec),
             cent_x(cent_x),
             cent_y(cent_y),
-            progress(angleDec) {}
+            progress(progress >= 0 ? progress : angleDec) {}
 
     virtual ~RotationTransformer() {
     }

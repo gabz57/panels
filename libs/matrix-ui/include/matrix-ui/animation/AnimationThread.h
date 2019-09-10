@@ -10,12 +10,13 @@
 class AnimationThread : public Thread {
 public:
     AnimationThread(Mutex *animation_mutex, std::list<PixelTransformer *> *transformers, int nbSteps,
-                    tmillis_t *duration_ms, bool infiniteLoop = false) :
+                    tmillis_t *duration_ms, bool infiniteLoop = false, tus_t initialClockCompensation = 0) :
             animation_mutex_(animation_mutex),
             transformers(transformers),
             nbSteps(nbSteps),
             duration_ms(duration_ms),
             infiniteLoop(infiniteLoop),
+            initialClockCompensation(initialClockCompensation),
             running_(false) {
     }
 
@@ -55,14 +56,18 @@ public:
         tus_t all_start_time = GetTimeInMicros();
         tus_t for_loop_start_time;
         tus_t for_loop_sleep_correction = 0;
-        tus_t while_loop_sleep_correction = 0;
         tus_t while_loop_start_time;
+        tus_t while_loop_sleep_correction = 0;
         while (!interrupt_received && running() && (infiniteLoop || animation_count <= 0)) {
             while_loop_start_time = GetTimeInMicros();
-            for (PixelTransformer *transformer : *transformers) {
-                transformer->Reset();
+            if (animation_count > 0) {
+                for (PixelTransformer *transformer : *transformers) {
+                    transformer->Reset();
+                }
             }
-            for (int i = 0; i < nbSteps; i++) {
+            int nbStepToAdvanceFirstTimeOnly = (int) (initialClockCompensation / (long long) frame_duration_us);
+            int step = animation_count > 0 ? 0 : nbStepToAdvanceFirstTimeOnly;
+            for (; step < nbSteps; step++) {
                 for_loop_start_time = GetTimeInMicros();
                 if (!running() || interrupt_received) break;
                 m = new MutexLock(animation_mutex_);
@@ -73,12 +78,15 @@ public:
                 SleepUs(frame_duration_us - (GetTimeInMicros() - for_loop_start_time) - for_loop_sleep_correction);
                 for_loop_sleep_correction = computeCorrectionSince(all_start_time,
                                                                    animation_count * (loop_duration_us) +
-                                                                   frame_duration_us * (i + 1));
+                                                                   frame_duration_us * (step + 1)
+                                                                   - initialClockCompensation);
             }
             animation_count++;
             if (interrupt_received) break;
-            SleepUs(loop_duration_us - (GetTimeInMicros() - while_loop_start_time) - while_loop_sleep_correction);
-            while_loop_sleep_correction = computeCorrectionSince(all_start_time, animation_count * (loop_duration_us));
+            SleepUs(loop_duration_us - (GetTimeInMicros() - while_loop_start_time) - while_loop_sleep_correction
+                    - (animation_count > 1 ? 0 : initialClockCompensation));
+            while_loop_sleep_correction = computeCorrectionSince(all_start_time, animation_count * (loop_duration_us)
+                                                                                 - initialClockCompensation);
             if (animation_count == INT_MAX) {
                 animation_count = 0;
                 all_start_time = GetTimeInMicros();
@@ -97,6 +105,7 @@ private:
     Mutex *animation_mutex_;
     std::list<PixelTransformer *> *transformers;
     tmillis_t *duration_ms;
+    tus_t initialClockCompensation;
     int nbSteps;
     bool infiniteLoop;
     bool running_;

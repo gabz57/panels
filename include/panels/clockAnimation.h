@@ -27,7 +27,7 @@
 
 const Color *circleColor = new Color(255, 0, 0);
 const Color *secondCursorColor = new Color(255, 255, 255);
-static bool alternativeColor = false;
+static bool alternativeColor = true;
 
 class AngleObserver : public Observer {
 public:
@@ -55,13 +55,11 @@ public:
         }
 
         time_t curr_time;
-        tm *curr_tm;
+        time(&curr_time);
+        tm *curr_tm = localtime(&curr_time);
+
         char date_string[100];
         char time_string[100];
-
-        time(&curr_time);
-        curr_tm = localtime(&curr_time);
-
         strftime(date_string, 50, "%d-%m-%Y", curr_tm);
         strftime(time_string, 50, "%T", curr_tm);
 
@@ -110,11 +108,14 @@ Panel *buildClockAnimationPanel(int panelWidth, int panelHeight) {
     animationPanel->addComponent(circle);
 
     // Rotating cursor - moving second
+    time_t curr_time;
+    time(&curr_time);
+    tm *curr_tm = localtime(&curr_time);
     auto *rectangleSeconds = new Rectangle("secondsRect", 0, 9, 1, 1, 63, 0,
                                            Layout(Floating::FLOAT_LEFT, *secondCursorColor));
-    auto *rotationTransformer = new RotationTransformer(360, 64, 64);
+    auto *rotationTransformer = new RotationTransformer(360, 64, 64, curr_tm->tm_sec * 6);
     Observee *observableRotationTransformer = rotationTransformer;
-    auto *parentAnimComponent = new AnimationComponent(rectangleSeconds, rotationTransformer, 360, 12000, true);
+    auto *parentAnimComponent = new AnimationComponent(rectangleSeconds, rotationTransformer, 360, 60000, true, curr_tm->tm_sec * 1000000);
     animationPanel->addComponent(parentAnimComponent);
 
     // populate map somehow
@@ -130,9 +131,9 @@ Panel *buildClockAnimationPanel(int panelWidth, int panelHeight) {
     int lineHeight = font->height() + 1;
 //    int lineWidth = panelWidth;
 
-    auto *dateTimePanel = new Panel("dateTimePanel", 160, panelHeight, 28, 64);
-    Text *time = new Text("time", "", font, Layout::FLOAT_LEFT, 0, -(lineHeight + 2));
-    Text *date = new Text("date", "", font, Layout::FLOAT_LEFT, 0, 2);
+    auto *dateTimePanel = new Panel("dateTimePanel", 160, panelHeight, 38, 64);
+    Text *time = new Text("time", "", font, Layout::FLOAT_LEFT, 6, -(lineHeight + 2));
+    Text *date = new Text("date", "", font, Layout::FLOAT_LEFT, 1, 2);
     dateTimePanel->addComponent(time);
     dateTimePanel->addComponent(date);
 
