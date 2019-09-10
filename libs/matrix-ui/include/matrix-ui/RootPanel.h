@@ -8,7 +8,7 @@
 
 class RootPanel : public Component {
 public:
-    RootPanel(string id, int width, int height, CanvasHolder &canvasHandler, Component* childComponent);
+    RootPanel(const string& id, int width, int height, CanvasHolder &canvasHandler, Component* childComponent);
 
     virtual ~RootPanel();
 

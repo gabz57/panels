@@ -14,7 +14,7 @@ public:
     static const Color DEFAULT_LINE_COLOR;
     static const Layout DEFAULT_LINE_LAYOUT;
 
-    Line(string id, int x_start, int y_start, int x_end, int y_end, int x_offset = 0, int y_offset = 0, const Layout &layout = DEFAULT_LINE_LAYOUT);
+    Line(const string& id, int x_start, int y_start, int x_end, int y_end, int x_offset = 0, int y_offset = 0, const Layout &layout = DEFAULT_LINE_LAYOUT);
 
     virtual ~Line();
 

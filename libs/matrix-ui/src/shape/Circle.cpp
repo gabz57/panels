@@ -6,7 +6,7 @@
 const Color Circle::DEFAULT_CIRCLE_COLOR = Color(0, 255, 0);
 const Layout Circle::DEFAULT_CIRCLE_LAYOUT = Layout(Floating::FLOAT_LEFT, DEFAULT_CIRCLE_COLOR);
 
-Circle::Circle(string id, int x_center, int y_center, int radius, int x_offset, int y_offset, const Layout &layout) :
+Circle::Circle(const string& id, int x_center, int y_center, int radius, int x_offset, int y_offset, const Layout &layout) :
         Component(id, x_offset, y_offset, layout),
         x_center(x_center),
         y_center(y_center),

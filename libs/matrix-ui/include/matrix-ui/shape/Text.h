@@ -14,7 +14,7 @@ public:
     static const Color DEFAULT_TEXT_COLOR;
     static const Layout DEFAULT_TEXT_LAYOUT;
 
-    Text(string id, string text, const rgb_matrix::Font *font, const Layout &layout = DEFAULT_TEXT_LAYOUT,
+    Text(const string& id, string text, const rgb_matrix::Font *font, const Layout &layout = DEFAULT_TEXT_LAYOUT,
          int x_offset = 0,
          int y_offset = 0);
 

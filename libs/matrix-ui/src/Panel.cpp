@@ -1,7 +1,7 @@
 #include <matrix-ui/Panel.h>
 #include <iostream>
 
-Panel::Panel(string id, int width, int height, int x_offset, int y_offset, const Layout &layout)
+Panel::Panel(const string& id, int width, int height, int x_offset, int y_offset, const Layout &layout)
         : Component(id, x_offset, y_offset, layout), width(width), height(height) {
 }
 

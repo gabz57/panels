@@ -10,7 +10,7 @@ using namespace rgb_matrix;
 
 class Component {
 public:
-    Component(string id, int x_offset, int y_offset, const Layout &layout);
+    Component(const string& id, int x_offset, int y_offset, const Layout &layout);
 
     virtual ~Component();
 

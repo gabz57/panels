@@ -5,7 +5,7 @@
 const Color Text::DEFAULT_TEXT_COLOR = Color(0, 0, 255);
 const Layout Text::DEFAULT_TEXT_LAYOUT = Layout(Floating::FLOAT_LEFT, DEFAULT_TEXT_COLOR);
 
-Text::Text(string id, string text, const rgb_matrix::Font *font, const Layout &layout, int x_offset, int y_offset) :
+Text::Text(const string& id, string text, const rgb_matrix::Font *font, const Layout &layout, int x_offset, int y_offset) :
         Component(id, x_offset, y_offset, layout),
         text(text),
         font(font) {

@@ -14,7 +14,7 @@ public:
     static const Color DEFAULT_CIRCLE_COLOR;
     static const Layout DEFAULT_CIRCLE_LAYOUT;
 
-    Circle(string id, int x_center, int y_center, int radius, int x_offset = 0, int y_offset = 0, const Layout &layout = DEFAULT_CIRCLE_LAYOUT);
+    Circle(const string& id, int x_center, int y_center, int radius, int x_offset = 0, int y_offset = 0, const Layout &layout = DEFAULT_CIRCLE_LAYOUT);
 
     virtual ~Circle();
 

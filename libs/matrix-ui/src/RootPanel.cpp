@@ -5,7 +5,7 @@ using namespace std;
 
 Layout DEFAULT_LAYOUT = Layout(Floating::FLOAT_LEFT);
 
-RootPanel::RootPanel(string id, int width, int height, CanvasHolder &canvasHandler, Component *childComponent) :
+RootPanel::RootPanel(const string& id, int width, int height, CanvasHolder &canvasHandler, Component *childComponent) :
         Component(id, 0, 0, DEFAULT_LAYOUT),
         width(width),
         height(height),

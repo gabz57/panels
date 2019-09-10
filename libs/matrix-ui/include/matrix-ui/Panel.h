@@ -12,7 +12,7 @@ static const Layout DEFAULT_LAYOUT = Layout(Floating::FLOAT_LEFT);
 
 class Panel : public Component {
 public:
-    Panel(string id, int width, int height, int x_offset, int y_offset, const Layout &layout = DEFAULT_LAYOUT);
+    Panel(const string& id, int width, int height, int x_offset, int y_offset, const Layout &layout = DEFAULT_LAYOUT);
 
     virtual ~Panel();
 

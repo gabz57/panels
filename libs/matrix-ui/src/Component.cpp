@@ -3,11 +3,11 @@
 
 using namespace rgb_matrix;
 
-Component::Component(string id, int x_offset, int y_offset, const Layout &layout) :
+Component::Component(const string& id, int x_offset, int y_offset, const Layout &layout) :
         id(id),
         x_offset(x_offset),
         y_offset(y_offset),
-        layout(Layout(layout)) {
+        layout(layout) {
 }
 
 Component::~Component() {
