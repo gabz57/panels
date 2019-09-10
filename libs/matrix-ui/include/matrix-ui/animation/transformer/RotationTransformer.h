@@ -12,14 +12,23 @@ public:
             cent_y(cent_y),
             progress(angleDec) {}
 
+    virtual ~RotationTransformer() {
+    }
+
+    int getProgressAngle() {
+        return progress;
+    }
+
     void Step() {
         if (progress <= angle_) {
             progress++;
+            NotifyObservers();
         }
     }
 
     void Reset() {
         progress = 0;
+        NotifyObservers();
     }
 
     virtual void MapPixel(int x, int y, int *matrix_x, int *matrix_y) {

@@ -23,6 +23,10 @@ int Panel::getHeight() const {
     return this->height;
 }
 
+const std::unordered_map<std::string, Component *> *Panel::getComponents() {
+    return &components;
+}
+
 void Panel::addComponent(Component *component) {
     // todo ensure fit inside width & height or print message + return 1
     component->setParent(this);

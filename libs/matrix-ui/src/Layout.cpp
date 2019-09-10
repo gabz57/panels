@@ -25,6 +25,9 @@ const Floating &Layout::getFloating() const {
 const Color &Layout::getColor() const {
     return color;
 }
+void Layout::setColor(const Color &color) {
+    this->color = color;
+}
 
 const list<PixelTransformer *> &Layout::getTransformers() const {
     return transformers;

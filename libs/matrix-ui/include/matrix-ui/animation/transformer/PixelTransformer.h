@@ -1,7 +1,9 @@
 #ifndef PANELS_PIXELTRANSFORMER_H
 #define PANELS_PIXELTRANSFORMER_H
 
-class PixelTransformer {
+#include <matrix-ui/dp/Observee.h>
+
+class PixelTransformer : public Observee {
 public:
     virtual ~PixelTransformer() {}
 

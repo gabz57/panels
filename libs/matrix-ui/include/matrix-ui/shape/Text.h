@@ -20,6 +20,8 @@ public:
 
     virtual ~Text();
 
+    void setText(string text);
+
     virtual int getWidth() const;
 
     virtual int getHeight() const;

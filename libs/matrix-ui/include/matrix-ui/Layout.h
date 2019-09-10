@@ -31,6 +31,7 @@ public:
     const Floating &getFloating() const;
 
     const Color &getColor() const;
+    void setColor(const Color &color);
 
     const list<PixelTransformer *> &getTransformers() const;
 
@@ -39,7 +40,7 @@ private:
 
     list<PixelTransformer *> transformers;
     const Floating floating;
-    const Color &color;
+    Color color;
 };
 
 

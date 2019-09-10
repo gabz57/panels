@@ -7,7 +7,7 @@ Component::Component(string id, int x_offset, int y_offset, const Layout &layout
         id(id),
         x_offset(x_offset),
         y_offset(y_offset),
-        layout(layout) {
+        layout(Layout(layout)) {
 }
 
 Component::~Component() {
@@ -43,7 +43,7 @@ int Component::yOffset() const {
     return this->y_offset;
 }
 
-const Layout &Component::getLayout() const {
+Layout &Component::getLayout()  {
     return this->layout;
 }
 

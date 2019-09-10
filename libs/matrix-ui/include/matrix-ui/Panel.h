@@ -24,6 +24,8 @@ public:
 
     virtual void draw(Canvas &canvas);
 
+    const std::unordered_map<std::string, Component *> *getComponents();
+
 protected:
     std::unordered_map<std::string, Component *> components;
 private:

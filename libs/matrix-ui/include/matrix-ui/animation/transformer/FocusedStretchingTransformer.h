@@ -12,6 +12,9 @@ public:
             cent_y(cent_y),
             progress(0) {}
 
+    virtual ~FocusedStretchingTransformer() {
+    }
+
     void Step() {
         if (progress <= angle_) {
             progress++;

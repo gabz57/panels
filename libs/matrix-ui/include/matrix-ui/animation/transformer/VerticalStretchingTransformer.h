@@ -12,14 +12,19 @@ public:
             progress(0),
             resolution(resolution) {}
 
+    virtual ~VerticalStretchingTransformer() {
+    }
+
     void Step() {
         if (progress <= resolution) {
             progress++;
+            NotifyObservers();
         }
     }
 
     void Reset() {
         progress = 0;
+        NotifyObservers();
     }
 
     virtual void MapPixel(int x, int y, int *matrix_x, int *matrix_y) {

@@ -14,6 +14,10 @@ Text::Text(string id, string text, const rgb_matrix::Font *font, const Layout &l
 Text::~Text() {
 }
 
+void Text::setText(string text) {
+    this->text = text;
+}
+
 int Text::getWidth() const {
     int width = 0;
     const char *utf8_text = this->text.c_str();

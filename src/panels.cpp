@@ -121,12 +121,12 @@ int runAnimatedPanels(int argc, char **argv) {
 
     CanvasHolder canvasHandler(matrix);
 
-    RootPanel animationRootPanel = RootPanel("demoAnimationRootPanel", panelWidth, panelHeight, canvasHandler,
-                                             buildDemoAnimationPanel(font, panelWidth, panelHeight, lineHeight,
-                                                                     lineWidth));
-//
-//    RootPanel animationRootPanel = RootPanel("clockAnimationRootPanel", panelWidth, panelHeight, canvasHandler,
-//                                            buildClockAnimationPanel(panelWidth, panelHeight));
+//    RootPanel animationRootPanel = RootPanel("demoAnimationRootPanel", panelWidth, panelHeight, canvasHandler,
+//                                             buildDemoAnimationPanel(font, panelWidth, panelHeight, lineHeight,
+//                                                                     lineWidth));
+
+    RootPanel animationRootPanel = RootPanel("clockAnimationRootPanel", panelWidth, panelHeight, canvasHandler,
+                                            buildClockAnimationPanel(panelWidth, panelHeight));
 
     int fps = 30;
     int usleepTime = 1000000 / fps;

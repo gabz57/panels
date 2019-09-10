@@ -36,7 +36,7 @@ public:
 
     int yOffset() const;
 
-    const Layout &getLayout() const;
+    Layout &getLayout() ;
 
     Canvas * getPreCanvas(Canvas &canvas);
 
@@ -46,7 +46,7 @@ private:
 protected:
     int x_offset;
     int y_offset;
-    const Layout layout;
+    Layout layout;
 };
 
 #endif /* COMPONENT_H */

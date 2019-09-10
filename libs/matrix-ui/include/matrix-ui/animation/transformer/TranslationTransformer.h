@@ -16,29 +16,19 @@ public:
             progress(0),
             max(std::max(std::abs(x), std::abs(y))) {}
 
-//    virtual bool GetSizeMapping(int matrix_width, int matrix_height,
-//                                int *visible_width, int *visible_height)
-//    const {
-//        if (angle_ % 180 == 0) {
-//            *visible_width = matrix_width;
-//            *visible_height = matrix_height;
-//        } else {
-//            *visible_width = matrix_height;
-//            *visible_height = matrix_width;
-//        }
-//        return true;
-//    }
+    virtual ~TranslationTransformer() {
+    }
 
     void Step() {
         if (progress < max) {
             progress++;
+            NotifyObservers();
         }
-//        progress %= max;
-//        cout << "Progression : " << 100*(float) progress / (float) max << "%"<< endl;
     }
 
     void Reset() {
         progress = 0;
+        NotifyObservers();
     }
 
     virtual void MapPixel(int x, int y, int *matrix_x, int *matrix_y) {
