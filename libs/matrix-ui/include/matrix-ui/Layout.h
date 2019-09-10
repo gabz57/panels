@@ -22,9 +22,11 @@ public:
     static const Layout FLOAT_LEFT;
     static const Layout FLOAT_RIGHT;
 
-    Layout(const Floating &floating, const Color &color = DEFAULT_COLOR);
+    Layout(const Floating &floating = Floating::FLOAT_LEFT, const Color &color = DEFAULT_COLOR, PixelTransformer * pixelTransformer = nullptr);
 
     Layout(const Layout &layout, const std::list<PixelTransformer *> &tr);
+
+    Layout(const Layout &layout, PixelTransformer * pixelTransformer);
 
     virtual ~Layout();
 

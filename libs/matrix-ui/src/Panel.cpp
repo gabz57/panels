@@ -34,10 +34,13 @@ void Panel::addComponent(Component *component) {
 }
 
 void Panel::draw(Canvas &canvas) {
+    Canvas *preCanvas = getPreCanvas(canvas);
+
     std::unordered_map<std::string, Component *> mp = this->components;
     auto it = mp.begin();
     while (it != this->components.end()) {
-        it->second->draw(canvas);
+        it->second->draw(*preCanvas);
         it++;
     }
+    delete preCanvas;
 }

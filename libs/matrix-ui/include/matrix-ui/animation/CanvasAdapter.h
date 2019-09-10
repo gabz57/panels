@@ -24,14 +24,19 @@ public:
     void SetPixel(int x, int y, uint8_t red, uint8_t green, uint8_t blue) {
         int x_mod = x;
         int y_mod = y;
+        int r_mod = red;
+        int g_mod = green;
+        int b_mod = blue;
         for (PixelTransformer *pixelTransformer : transformers) {
-            pixelTransformer->MapPixel(x_mod, y_mod, &x_mod, &y_mod);
+            pixelTransformer->MapPixel(x_mod, y_mod, &x_mod, &y_mod, red, green, blue, &r_mod, &g_mod, &b_mod);
         }
-
+        uint8_t r = r_mod;
+        uint8_t g = g_mod;
+        uint8_t b = b_mod;
 // <=> // if (x_mod >= min_display_x && x_mod < max_display_x && y_mod >= min_display_y && y_mod < max_display_y) {
 //        if (x_mod >= 0 && x_mod < delegatee_->width()
 //         && y_mod >= 0 && y_mod < delegatee_->height()) {
-            delegatee_->SetPixel(x_mod, y_mod, red, green, blue);
+            delegatee_->SetPixel(x_mod, y_mod, r, g, b);
 //        }
     }
 

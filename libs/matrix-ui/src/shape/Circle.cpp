@@ -25,16 +25,10 @@ int Circle::getHeight() const {
 }
 
 void Circle::draw(Canvas &canvas) {
+    Canvas *preCanvas = getPreCanvas(canvas);
     const Color &color = getLayout().getColor();
     int x_cent = x_center + this->xOffset();
     int y_cent = y_center + this->yOffset();
-//
-//    for (int i = x_cent - radius; i <= x_cent + radius; ++i) {
-//        for (int j = y_cent - radius; j <= y_cent + radius; ++j) {
-//            canvas.SetPixel()
-//
-//        }
-//    }
-
-    rgb_matrix::DrawCircle(&canvas, x_cent, y_cent, radius, color);
+    rgb_matrix::DrawCircle(preCanvas, x_cent, y_cent, radius, color);
+    delete preCanvas;
 }

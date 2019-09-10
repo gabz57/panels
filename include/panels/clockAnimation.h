@@ -16,6 +16,7 @@
 #include <matrix-ui/CanvasHolder.h>
 #include <matrix-ui/animation/transformer/TranslationTransformer.h>
 #include <matrix-ui/animation/transformer/VerticalStretchingTransformer.h>
+#include <matrix-ui/animation/transformer/ColorTransformer.h>
 #include <matrix-ui/animation/transformer/RotationTransformer.h>
 #include <matrix-ui/animation/AnimationComponent.h>
 #include <matrix-ui/dp/Observer.h>
@@ -27,6 +28,7 @@
 
 const Color *circleColor = new Color(255, 0, 0);
 const Color *secondCursorColor = new Color(255, 255, 255);
+const Color *textColor = new Color(255, 255, 255);
 static bool alternativeColor = true;
 
 class AngleObserver : public Observer {
@@ -66,8 +68,8 @@ public:
 //        cout << date_string << endl;
 //        cout << time_string << endl;
 
-        Text* datePanel = dynamic_cast<Text *>(dateTimePanel->getComponents()->find("date")->second);
-        Text* timePanel = dynamic_cast<Text *>(dateTimePanel->getComponents()->find("time")->second);
+        Text *datePanel = dynamic_cast<Text *>(dateTimePanel->getComponents()->find("date")->second);
+        Text *timePanel = dynamic_cast<Text *>(dateTimePanel->getComponents()->find("time")->second);
         datePanel->setText(date_string);
         timePanel->setText(time_string);
     };
@@ -80,12 +82,10 @@ private:
 Panel *buildClockAnimationPanel(int panelWidth, int panelHeight) {
     auto *animationPanel = new Panel("animationPanel", panelWidth, panelHeight, 0, 0);
     // Hours
-    auto *rectangleTemplate = new Rectangle("rect", 0, 9, 1, 10, 63, 0);
+    auto *rectangleTemplate = new Rectangle("rect", 0, 9, 1, 5, 63, 0);
     for (int i = 0; i < 12; i++) {
-        list<PixelTransformer *> transformers = list<PixelTransformer *>();
         auto *rotationTransformer = new RotationTransformer(i * 360 / 12, 64, 64);
-        transformers.push_back(rotationTransformer);
-        auto adaptedLayout = new Layout(rectangleTemplate->getLayout(), transformers);
+        auto adaptedLayout = new Layout(rectangleTemplate->getLayout(), rotationTransformer);
         auto *newRectangle = new Rectangle(rectangleTemplate, "rect#" + to_string(i), *adaptedLayout);
         animationPanel->addComponent(newRectangle);
     }
@@ -94,17 +94,17 @@ Panel *buildClockAnimationPanel(int panelWidth, int panelHeight) {
     auto *dots = new list<Component *>();
     auto *dotTemplate = new Dot("dot", 0, 9, 63, 0);
     for (int i = 0; i < 60; i++) {
-        list<PixelTransformer *> transformers = list<PixelTransformer *>();
         auto *rotationTransformer = new RotationTransformer(i * 360 / 60, 64, 64);
-        transformers.push_back(rotationTransformer);
-        auto adaptedLayout = new Layout(dotTemplate->getLayout(), transformers);
+        auto adaptedLayout = new Layout(dotTemplate->getLayout(), rotationTransformer);
         Dot *newDot = new Dot(dotTemplate, "dot#" + to_string(i), *adaptedLayout);
         animationPanel->addComponent(newDot);
         dots->push_back(newDot);
     }
 
     // Circle
-    auto *circle = new Circle("circle", 64, 64, 58, 0, 0, Layout(Floating::FLOAT_LEFT, *circleColor));
+    auto colorTransformer = new ColorTransformer(0, 0, 128, 128);
+    auto circleLayout = new Layout(Floating::FLOAT_LEFT, *circleColor, colorTransformer);
+    auto *circle = new Circle("circle", 64, 64, 58, 0, 0, *circleLayout);
     animationPanel->addComponent(circle);
 
     // Rotating cursor - moving second
@@ -114,8 +114,12 @@ Panel *buildClockAnimationPanel(int panelWidth, int panelHeight) {
     auto *rectangleSeconds = new Rectangle("secondsRect", 0, 9, 1, 1, 63, 0,
                                            Layout(Floating::FLOAT_LEFT, *secondCursorColor));
     auto *rotationTransformer = new RotationTransformer(360, 64, 64, curr_tm->tm_sec * 6);
+    list<PixelTransformer *> transformers;
+    transformers.push_back(rotationTransformer);
+    transformers.push_back(colorTransformer);
     Observee *observableRotationTransformer = rotationTransformer;
-    auto *parentAnimComponent = new AnimationComponent(rectangleSeconds, rotationTransformer, 360, 60000, true, curr_tm->tm_sec * 1000000);
+    auto *parentAnimComponent = new AnimationComponent(rectangleSeconds, &transformers, 360, 60000, true,
+                                                       curr_tm->tm_sec * 1000000);
     animationPanel->addComponent(parentAnimComponent);
 
     // populate map somehow
@@ -132,8 +136,11 @@ Panel *buildClockAnimationPanel(int panelWidth, int panelHeight) {
 //    int lineWidth = panelWidth;
 
     auto *dateTimePanel = new Panel("dateTimePanel", 160, panelHeight, 38, 64);
-    Text *time = new Text("time", "", font, Layout::FLOAT_LEFT, 6, -(lineHeight + 2));
-    Text *date = new Text("date", "", font, Layout::FLOAT_LEFT, 1, 2);
+//    auto colorTransformer = new ColorTransformer(0,0,128,128);
+//    auto adaptedPanelLayout = new Layout(Floating ::FLOAT_LEFT, *circleColor, colorTransformer);
+
+    Text *time = new Text("time", "", font, *new Layout(Floating::FLOAT_LEFT, *textColor, colorTransformer), 6, -(lineHeight + 2));
+    Text *date = new Text("date", "", font, *new Layout(Floating::FLOAT_LEFT, *textColor, colorTransformer), 1, 2);
     dateTimePanel->addComponent(time);
     dateTimePanel->addComponent(date);
 

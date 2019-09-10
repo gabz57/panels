@@ -29,7 +29,6 @@ void Rectangle::draw(Canvas &canvas) {
     // FIXME: poor style that does the trick for 'Rectangle',
     //  should find a design to apply Component.layout.transformers at every level transparently
     Canvas *preCanvas = getPreCanvas(canvas);
-
     int x_start = this->x + xOffset();
     int x_end = x_start + width;
     int y_start = this->y + yOffset();

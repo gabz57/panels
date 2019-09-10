@@ -29,7 +29,6 @@ int Dot::getHeight() const {
 
 void Dot::draw(Canvas &canvas) {
     Canvas *preCanvas = getPreCanvas(canvas);
-
     const Color &color = getLayout().getColor();
     preCanvas->SetPixel(this->xOffset() + x, this->yOffset() + y, color.r, color.g, color.b);
     delete preCanvas;

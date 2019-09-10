@@ -25,11 +25,10 @@ int Line::getHeight() const {
 }
 
 void Line::draw(Canvas &canvas) {
-
-
-
+    Canvas *preCanvas = getPreCanvas(canvas);
     const Color &color = getLayout().getColor();
     int x = this->xOffset();
     int y = this->yOffset();
-    rgb_matrix::DrawLine(&canvas, x + x_start, y + y_start, x + x_end, y + y_end, color);
+    rgb_matrix::DrawLine(preCanvas, x + x_start, y + y_start, x + x_end, y + y_end, color);
+    delete preCanvas;
 }

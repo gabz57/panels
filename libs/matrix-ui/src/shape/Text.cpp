@@ -37,9 +37,10 @@ int Text::getHeight() const {
 
 void Text::draw(Canvas &canvas) {
     //   std::cout << "Drawing Text :: " << this->getId() << " - " << this->text << std::endl;
+    Canvas *preCanvas = getPreCanvas(canvas);
 
     const Color &color = getLayout().getColor();
-    Color bg_color(0, 0, 0);
+    const Color *bg_color = nullptr;
 
     int letter_spacing = 0;
 
@@ -56,5 +57,6 @@ void Text::draw(Canvas &canvas) {
 //              << " offset(" << this->xOffset() << "," << this->yOffset() << ") "
 //              << std::endl;
 
-    rgb_matrix::DrawText(&canvas, *font, x, y + font->baseline(), color, &bg_color, this->text.c_str(), letter_spacing);
+    rgb_matrix::DrawText(preCanvas, *font, x, y + font->baseline(), color, bg_color, this->text.c_str(), letter_spacing);
+    delete preCanvas;
 }

@@ -27,7 +27,8 @@ public:
         progress = 0;
     }
 
-    virtual void MapPixel(int x, int y, int *matrix_x, int *matrix_y) {
+    virtual void MapPixel(int x, int y, int *matrix_x, int *matrix_y, int red, int green, int blue,
+                          int *r_mod, int *g_mod, int *b_mod) {
         Rotate(x, y, DegToRad((float) (progress % 360)), matrix_x, matrix_y);
     }
 
