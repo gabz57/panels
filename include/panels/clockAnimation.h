@@ -14,6 +14,7 @@
 #include <matrix-ui/samples/TemperatureLine.h>
 #include <matrix-ui/shape/TextLine.h>
 #include <matrix-ui/CanvasHolder.h>
+#include <matrix-ui/animation/transformer/adv/PanelSlider.h>
 #include <matrix-ui/animation/transformer/base/TranslationTransformer.h>
 #include <matrix-ui/animation/transformer/base/VerticalStretchingTransformer.h>
 #include <matrix-ui/animation/transformer/base/ColorTransformer.h>
@@ -82,7 +83,7 @@ private:
 Panel *buildClockAnimationPanel(int panelWidth, int panelHeight) {
     auto *animationPanel = new Panel("animationPanel", panelWidth, panelHeight, 0, 0);
     // Hours
-    auto *rectangleTemplate = new Rectangle("rect", 0, 9, 1, 5, 63, 0);
+    auto *rectangleTemplate = new Rectangle("rect", 0, 9, 1, 5, 64, 0);
     for (int i = 0; i < 12; i++) {
         auto *rotationTransformer = new RotationTransformer(i * 360 / 12, 64, 64);
         auto adaptedLayout = new Layout(rectangleTemplate->getLayout(), rotationTransformer);
@@ -92,7 +93,7 @@ Panel *buildClockAnimationPanel(int panelWidth, int panelHeight) {
 
     // Seconds
     auto *dots = new list<Component *>();
-    auto *dotTemplate = new Dot("dot", 0, 9, 63, 0);
+    auto *dotTemplate = new Dot("dot", 0, 9, 64, 0);
     for (int i = 0; i < 60; i++) {
         auto *rotationTransformer = new RotationTransformer(i * 360 / 60, 64, 64);
         auto adaptedLayout = new Layout(dotTemplate->getLayout(), rotationTransformer);
@@ -111,7 +112,7 @@ Panel *buildClockAnimationPanel(int panelWidth, int panelHeight) {
     time_t curr_time;
     time(&curr_time);
     tm *curr_tm = localtime(&curr_time);
-    auto *rectangleSeconds = new Rectangle("secondsRect", 0, 9, 1, 1, 63, 0,
+    auto *rectangleSeconds = new Rectangle("secondsRect", 0, 9, 1, 1, 64, 0,
                                            Layout(Floating::FLOAT_LEFT, *secondCursorColor));
     auto *rotationTransformer = new RotationTransformer(360, 64, 64, curr_tm->tm_sec * 6);
     list<PixelTransformer *> transformers;
@@ -135,16 +136,21 @@ Panel *buildClockAnimationPanel(int panelWidth, int panelHeight) {
     int lineHeight = font->height() + 1;
 //    int lineWidth = panelWidth;
 
-    auto *dateTimePanel = new Panel("dateTimePanel", 160, panelHeight, 38, 64);
 //    auto colorTransformer = new ColorTransformer(0,0,128,128);
 //    auto adaptedPanelLayout = new Layout(Floating ::FLOAT_LEFT, *circleColor, colorTransformer);
+    int textBlocHeight = 2 * (lineHeight + 2);
+    auto *dateTimePanel = new Panel("dateTimePanel", 160, textBlocHeight);
 
     Text *time = new Text("time", "", font, *new Layout(Floating::FLOAT_LEFT, *textColor, colorTransformer), 6, -(lineHeight + 2));
     Text *date = new Text("date", "", font, *new Layout(Floating::FLOAT_LEFT, *textColor, colorTransformer), 1, 2);
     dateTimePanel->addComponent(time);
     dateTimePanel->addComponent(date);
 
-    animationPanel->addComponent(dateTimePanel);
+    auto slides = list<Component *>();
+    slides.push_back(dateTimePanel);
+    PanelSlider *slider = new PanelSlider("sliderPanel", slides, 5000,  true, 38, 64);
+
+    animationPanel->addComponent(slider);
 
     // color switch for seconds
     Observer *angleObserver = new AngleObserver(dots, dateTimePanel);

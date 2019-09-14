@@ -27,9 +27,9 @@ public:
 
     string getId() const;
 
-    int xOffset() const;
+    virtual int xOffset() const;
 
-    int yOffset() const;
+    virtual int yOffset() const;
 
     Layout &getLayout();
 

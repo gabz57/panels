@@ -7,10 +7,28 @@
 #include "matrix-ui/Layout.h"
 #include "matrix-ui/animation/AnimationThread.h"
 #include "matrix-ui/animation/CanvasAdapter.h"
+#include "matrix-ui/animation/transformer/adv/AnimationEndListener.h"
+#include "matrix-ui/dp/Observee.h"
+#include "matrix-ui/dp/Observer.h"
 
 static Layout DEFAULT_ANIMATION_LAYOUT = Layout(Floating::FLOAT_LEFT);
 
-class AnimationComponent : public Component {
+class AnimationThreadEndObserver : public Observer {
+public:
+    explicit AnimationThreadEndObserver(const AnimationEndListener &animationEndListener) :
+            animationEndListener(animationEndListener) {}
+
+    ~AnimationThreadEndObserver() override = default;
+
+    void Notify(Observee *observee) override {
+        this->animationEndListener.onEnd();
+    };
+
+private:
+    const AnimationEndListener &animationEndListener;
+};
+
+class AnimationComponent : public Component, public AnimationEndListener {
 public:
     AnimationComponent(Component *component, PixelTransformer *transformer, int nbSteps, tmillis_t duration_ms,
                        bool infiniteLoop = false, tus_t initialClockCompensation = 0, int x_offset = 0,
@@ -22,6 +40,8 @@ public:
         this->transformers.push_back(transformer);
         this->animationThread = new AnimationThread(&this->animation_mutex_, &this->transformers, this->nbSteps,
                                                     &this->duration_ms, infiniteLoop, initialClockCompensation);
+        animationThreadEndObserver = new AnimationThreadEndObserver(*this);
+        animationThread->AddObserver(animationThreadEndObserver);
         this->started = false;
         component->setParent(this);
     }
@@ -36,11 +56,14 @@ public:
         this->transformers.assign(transformers->begin(), transformers->end());
         animationThread = new AnimationThread(&this->animation_mutex_, &this->transformers, this->nbSteps,
                                               &this->duration_ms, infiniteLoop, initialClockCompensation);
+        animationThreadEndObserver = new AnimationThreadEndObserver(*this);
+        animationThread->AddObserver(animationThreadEndObserver);
         started = false;
         component->setParent(this);
     }
 
     virtual ~AnimationComponent() {
+        delete animationThreadEndObserver;
         while (!transformers.empty()) {
             delete transformers.front(), transformers.pop_front();
         }
@@ -52,11 +75,18 @@ public:
             started = true;
             // let transformers being modified to animate at next drawing
             animationThread->Start();
+            cout << "started : " << this->delegate->getId();
+            cout << endl;
         }
         MutexLock lock(&animation_mutex_);
         CanvasAdapter canvasAdapter = CanvasAdapter(&canvas, transformers);
         delegate->drawComponent(canvasAdapter);
     };
+
+    void onEnd() const {
+        cout << "ended : " << this->delegate->getId();
+        cout << endl;
+    }
 
     virtual int getWidth() const {
         return delegate->getWidth();
@@ -74,6 +104,8 @@ private:
     int nbSteps;
     AnimationThread *animationThread;
     bool started;
+    AnimationThreadEndObserver *animationThreadEndObserver;
 };
+
 
 #endif //PANELS_ANIMATIONCOMPONENT_H

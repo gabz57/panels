@@ -31,7 +31,7 @@ RGBMatrix *createMatrix(int argc, char **argv) {
     defaults.rows = 64;
     defaults.cols = 64;
     defaults.chain_length = 4;
-    defaults.pixel_mapper_config = "U-mapper;Rotate:180";
+    defaults.pixel_mapper_config = "U-mapper";//Rotate:180";
     defaults.parallel = 1;
     defaults.show_refresh_rate = true;
     return rgb_matrix::CreateMatrixFromFlags(&argc, &argv, &defaults);

@@ -6,6 +6,13 @@
 
 class RotationTransformer : public PixelTransformer {
 public:
+    /**
+     *
+     * @param angleDec
+     * @param cent_x
+     * @param cent_y
+     * @param progress -1 (DEFAULT) : final position (without time)
+     */
     RotationTransformer(int angleDec, int cent_x, int cent_y, int progress = -1) :
             angle_(angleDec),
             cent_x(cent_x),

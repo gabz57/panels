@@ -45,7 +45,3 @@ void Layout::setColor(const Color &color) {
 const list<PixelTransformer *> &Layout::getTransformers() const {
     return transformers;
 }
-
-//void Layout::setTransformers(const list<PixelTransformer *> &new_transformers) {
-//    this->transformers.assign(new_transformers.cbegin(), new_transformers.cend());
-//}

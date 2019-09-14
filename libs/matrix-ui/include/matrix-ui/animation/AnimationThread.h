@@ -6,8 +6,9 @@
 #include <list>
 #include <matrix-ui/animation/LocalTime.h>
 #include <matrix-ui/animation/transformer/PixelTransformer.h>
+#include <matrix-ui/dp/Observee.h>
 
-class AnimationThread : public Thread {
+class AnimationThread : public Thread, public Observee {
 public:
     AnimationThread(Mutex *animation_mutex, std::list<PixelTransformer *> *transformers, int nbSteps,
                     tmillis_t *duration_ms, bool infiniteLoop = false, tus_t initialClockCompensation = 0) :
@@ -40,6 +41,9 @@ public:
     void Stop() {
         MutexLock l(animation_mutex_);
         running_ = false;
+        if (!interrupt_received) {
+            NotifyObservers();
+        }
     }
 
     bool running() {

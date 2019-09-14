@@ -6,24 +6,32 @@
 
 class VerticalStretchingTransformer : public PixelTransformer {
 public:
-    VerticalStretchingTransformer(float factor, int axis_y, int resolution) :
+    VerticalStretchingTransformer(float factor, int axis_y, int resolution, bool reverse = false) :
             factor(factor),
             axis_y(axis_y),
-            progress(0),
-            resolution(resolution) {}
+            progress(reverse ? resolution : 0),
+            resolution(resolution),
+            reverse(reverse) {}
 
     virtual ~VerticalStretchingTransformer() {
     }
 
     void Step() {
-        if (progress <= resolution) {
-            progress++;
-            NotifyObservers();
+        if (reverse) {
+            if (progress > 0) {
+                progress--;
+                NotifyObservers();
+            }
+        } else {
+            if (progress <= resolution) {
+                progress++;
+                NotifyObservers();
+            }
         }
     }
 
     void Reset() {
-        progress = 0;
+        progress = reverse ? resolution : 0;
         NotifyObservers();
     }
 
@@ -48,6 +56,7 @@ private:
 
     const int resolution;
     int progress;
+    bool reverse;
 };
 
 #endif //PANELS_VERTICALSTRETCHINGTRANSFORMER_H
