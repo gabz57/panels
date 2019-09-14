@@ -27,6 +27,5 @@ add_executable(panels src/panels.cpp ${HW_HEADER_FILE}  /
         ${SRC_FILES} ${HEADER_FILES} /
         ${RAPIDJSON_HEADER_FILES} /
         ${INFLUXDB_HEADER_FILES})
-#link_directories(${CMAKE_BINARY_DIR}/libs/matrix/lib)
+
 target_link_libraries(panels -lpthread)
-#target_link_libraries(panels -lpthread)
